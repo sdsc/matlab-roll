@@ -1,0 +1,41 @@
+<?xml version="1.0" standalone="no"?>
+
+<graph>
+
+<description>
+matlab client + distributed computing server
+</description>
+
+<copyright>
+copyright 2004-2009 The MathWorks, Inc.
+</copyright>
+
+<changelog>
+</changelog>
+
+<edge from="base">
+  <to>matlab-common</to>
+</edge>
+<order head="base">
+  <tail>matlab-common</tail>
+</order>
+
+<edge from="server">
+  <to>matlab-server</to>
+</edge>
+<order head="server">
+  <tail>matlab-server</tail>
+</order>
+
+<edge from="envmodules-common">
+  <to>matlab-modules-common</to>
+</edge>
+<order head="envmodules-common">
+  <tail>matlab-modules-common</tail>
+</order>
+
+<order head="matlab-common">
+  <tail>matlab-modules-common</tail>
+</order>
+
+</graph>
