@@ -1,0 +1,83 @@
+<?xml version="1.0" standalone="no"?>
+
+<kickstart>
+
+<description>
+The matlab roll installation test.
+</description>
+
+<copyright>
+Copyright (c) 2000 - 2011 The Regents of the University of California.
+All rights reserved. Rocks(r) v5.1 www.rocksclusters.org
+</copyright>
+
+<changelog>
+</changelog>
+
+<post>
+
+/bin/mkdir -m 0755 /root/rolltests
+
+<file name="/root/rolltests/matlab.t" perms="0755">
+<![CDATA[#!/usr/bin/perl -w
+# matlab roll installation test.  Usage:
+# matlab.t [nodetype]
+#   where nodetype is one of "Compute", "Dbnode", "Frontend" or "Login"
+#   if not specified, the test assumes either Compute or Frontend
+
+use Test::More qw(no_plan);
+
+my $appliance = $#ARGV >= 0 ? $ARGV[0] :
+                -d '/export/rocks/install' ? 'Frontend' : 'Compute';
+my $installedOnAppliancesPattern = '.';
+my $isInstalled = -d '/opt/matlab/2011b';
+my $output;
+
+# matlab-common.xml
+if($appliance =~ /$installedOnAppliancesPattern/) {
+  ok($isInstalled, 'matlab installed');
+} else {
+  ok(! $isInstalled, 'matlab not installed');
+}
+SKIP: {
+
+  skip 'matlab not installed', 3 if ! $isInstalled;
+  $output = `/opt/matlab/2011b/bin/matlab -nodisplay -r ver,exit 2>&1`;
+  like($output, qr/[Vv]ersion:\s*\d+\.\d+/, 'matlab exec works');
+
+}
+
+# matlab-modules-common
+SKIP: {
+
+  skip 'matlab not installed', 1 if ! $isInstalled;
+  my $modulesInstalled = -f '/etc/profile.d/modules.sh';
+  if($modulesInstalled) {
+    ok(! -f '/etc/profile.d/matlab.csh' &&
+       ! -f '/etc/profile.d/matlab.sh', 'matlab profile.d removed');
+    like($ENV{MODULEPATH}, qr#/opt/modulefiles/applications#,
+         'MODULEPATH set for applications');
+    `/bin/ls /opt/modulefiles/applications/matlab/[0-9]* 2>&1`;
+    ok($? == 0, 'matlab module installed');
+    `/bin/ls /opt/modulefiles/applications/matlab/.version.[0-9]* 2>&1`;
+    ok($? == 0, 'matlab version module installed');
+    ok(-l '/opt/modulefiles/applications/matlab/.version',
+       'matlab version module link created');
+  } else {
+    ok(-f '/etc/profile.d/matlab.csh' && -f '/etc/profile.d/matlab.sh',
+       'matlab profile.d installed');
+  }
+
+}
+
+# matlab-server.xml
+SKIP: {
+  skip 'not server', 1 if $appliance ne 'Frontend';
+  ok(-x '/etc/init.d/matlab', 'license server installed');
+}
+]]>
+</file>
+
+</post>
+
+</kickstart> 
