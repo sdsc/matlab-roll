@@ -77,7 +77,9 @@ install::
            ln -s libstdc++.so.6.* libstdc++.so.6; \
            cd ../..; \
 	   ./install -inputFile installer_input; \
-           cp ../patch-files/lib* $(ROOT)/$(PKGROOT)/lib \
+           cp ../patch-files/lib* $(ROOT)/$(PKGROOT)/lib; \
+           cp ../patch-files/*.sh $(ROOT)/$(PKGROOT)/toolbox/local; \
+           cp ../patch-files/*.m $(ROOT)/$(PKGROOT)/toolbox/local \
         )
 
 clean::
