@@ -70,6 +70,7 @@ install::
 	cp patch-files/license.dat  $(SOURCE)
 	perl -pi -e "s!ROLLINSTALL!$(ROOT)/$(PKGROOT)!" $(SOURCE)/installer_input
 	perl -pi -e "s!ROLLPATH!$(PWD)/$(SOURCE)!" $(SOURCE)/installer_input
+	export  -n DISPLAY=
 	( \
            cd $(SOURCE)/bin/glnxa64; \
            rm libstdc++.so.6* ;  \
