@@ -68,6 +68,7 @@ install::
 	cat $(SOURCE).* | tar zxvf -
 	cp patch-files/installer_input  $(SOURCE)
 	cp patch-files/license.dat  $(SOURCE)
+	cp patch-files/install  $(SOURCE)
 	perl -pi -e "s!ROLLINSTALL!$(ROOT)/$(PKGROOT)!" $(SOURCE)/installer_input
 	perl -pi -e "s!ROLLPATH!$(PWD)/$(SOURCE)!" $(SOURCE)/installer_input
 	export  -n DISPLAY=
