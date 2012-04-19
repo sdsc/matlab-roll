@@ -61,6 +61,8 @@ REDHAT.ROOT = $(PWD)/../../
 
 -include $(ROCKSROOT)/etc/Rules.mk
 
+build:
+
 install::
 	( \
            cd $(REDHAT.ROOT)/src/build-matlab/opt/matlab/$(VERSION)/toolbox; \
