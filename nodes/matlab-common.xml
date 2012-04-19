@@ -15,7 +15,8 @@ All rights reserved. Rocks(r) v5.1 www.rocksclusters.org
 <changelog>
 </changelog>
 
-<package>matlab</package>
+<package>matlab_1</package>
+<package>matlab_2</package>
 
 <post>
 
