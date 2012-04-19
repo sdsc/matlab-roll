@@ -26,7 +26,7 @@ set path = ( /opt/matlab/2011b/bin $path )
 setenv LD_LIBRARY_PATH /opt/matlab/2011b/lib:$LD_LIBRARY_PATH
 </file>
 
-<file name="/etc/profile.d/ddt.sh" perms="0755" >
+<file name="/etc/profile.d/matlab.sh" perms="0755" >
 export PATH=/opt/matlab/2011b/bin:$PATH
 setenv LD_LIBRARY_PATH=/opt/matlab/2011b/lib:$LD_LIBRARY_PATH
 </file>
