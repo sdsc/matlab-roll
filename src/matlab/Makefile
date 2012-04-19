@@ -62,14 +62,11 @@ REDHAT.ROOT = $(PWD)/../../
 -include $(ROCKSROOT)/etc/Rules.mk
 
 build:
-
-install::
-	mkdir -p $(ROOT)/$(PKGROOT)/lib
 	cat $(SOURCE).* | tar zxvf -
 	cp patch-files/installer_input  $(SOURCE)
 	cp patch-files/license.dat  $(SOURCE)
 	cp patch-files/install  $(SOURCE)
-	perl -pi -e "s!ROLLINSTALL!$(ROOT)/$(PKGROOT)!" $(SOURCE)/installer_input
+	perl -pi -e "s!ROLLINSTALL!$(REDHAT.ROOT)/src/build-matlab!" $(SOURCE)/installer_input
 	perl -pi -e "s!ROLLPATH!$(PWD)/$(SOURCE)!" $(SOURCE)/installer_input
 	export  -n DISPLAY=
 	( \
@@ -79,10 +76,12 @@ install::
            ln -s libstdc++.so.6.* libstdc++.so.6; \
            cd ../..; \
 	   ./install -inputFile installer_input; \
-           cp ../patch-files/lib* $(ROOT)/$(PKGROOT)/lib; \
-           cp ../patch-files/*.sh $(ROOT)/$(PKGROOT)/toolbox/local; \
-           cp ../patch-files/*.m $(ROOT)/$(PKGROOT)/toolbox/local \
+           cp ../patch-files/lib* $(REDHAT.ROOT)/src/build-matlab/lib; \
+           cp ../patch-files/*.sh $(REDHAT.ROOT)/src/build-matlab/toolbox/local; \
+           cp ../patch-files/*.m $(REDHAT.ROOT)/src/build-matlab/toolbox/local \
         )
+
+install::
 
 clean::
 	rm -rf $(SOURCE)
