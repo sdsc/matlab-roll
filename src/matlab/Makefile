@@ -82,6 +82,7 @@ build:
         )
 
 install::
+        mkdir $(ROOT)/$(PKGROOT)
 
 clean::
 	rm -rf $(SOURCE)

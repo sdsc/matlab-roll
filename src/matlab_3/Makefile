@@ -64,6 +64,7 @@ REDHAT.ROOT = $(PWD)/../../
 install::
 	( \
            cd $(REDHAT.ROOT)/src/build-matlab/opt/matlab/$(VERSION)/toolbox; \
+           rm -rf $(ROOT)/$(PKGROOT)/*; \
            mv [s-z]* $(ROOT)/$(PKGROOT)/toolbox\
         )
 
