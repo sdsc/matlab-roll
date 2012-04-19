@@ -65,6 +65,7 @@ build:
 
 
 install::
+	mkdir -p $(ROOT)/$(PKGROOT)
 	( \
            cd $(REDHAT.ROOT)/src/build-matlab/opt/matlab/$(VERSION); \
            mv [a-s]* tr* X11 $(ROOT)/$(PKGROOT) \
