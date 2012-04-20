@@ -55,8 +55,7 @@
 # @Copyright@
 #
 
-PKGROOT = /opt/$(NAME)/$(VERSION)
-SOURCE = $(NAME)-$(VERSION)
+PKGROOT = /opt/matlab/$(VERSION)
 REDHAT.ROOT = $(PWD)/../../
 
 -include $(ROCKSROOT)/etc/Rules.mk
@@ -67,7 +66,7 @@ build:
 install::
 	mkdir -p $(ROOT)/$(PKGROOT)
 	( \
-           cd $(REDHAT.ROOT)/src/build-matlab/opt/matlab/$(VERSION); \
+           cd $(REDHAT.ROOT)/src/build-matlab; \
            mv [a-s]* tr* X11 $(ROOT)/$(PKGROOT) \
         )
 
