@@ -68,14 +68,15 @@ build:
 	cp patch-files/install  $(SOURCE)
 	perl -pi -e "s!ROLLINSTALL!$(REDHAT.ROOT)/src/build-matlab!" $(SOURCE)/installer_input
 	perl -pi -e "s!ROLLPATH!$(PWD)/$(SOURCE)!" $(SOURCE)/installer_input
-	export  -n DISPLAY=
 	( \
+	   export  -n DISPLAY=; \
            cd $(SOURCE)/bin/glnxa64; \
            rm libstdc++.so.6* ;  \
            cp /usr/lib64/libstdc++.so.6.* .; \
            ln -s libstdc++.so.6.* libstdc++.so.6; \
            cd ../..; \
 	   ./install -inputFile installer_input; \
+           mkdir $(REDHAT.ROOT)/src/build-matlab/lib; \
            cp ../patch-files/lib* $(REDHAT.ROOT)/src/build-matlab/lib; \
            cp ../patch-files/*.sh $(REDHAT.ROOT)/src/build-matlab/toolbox/local; \
            cp ../patch-files/*.m $(REDHAT.ROOT)/src/build-matlab/toolbox/local \
