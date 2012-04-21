@@ -18,6 +18,7 @@ All rights reserved. Rocks(r) v5.1 www.rocksclusters.org
 <package>matlab_1</package>
 <package>matlab_2</package>
 <package>matlab_3</package>
+<package>matlab</package>
 
 <post>
 
@@ -28,7 +29,7 @@ setenv LD_LIBRARY_PATH /opt/matlab/2011b/lib:$LD_LIBRARY_PATH
 
 <file name="/etc/profile.d/matlab.sh" perms="0755" >
 export PATH=/opt/matlab/2011b/bin:$PATH
-setenv LD_LIBRARY_PATH=/opt/matlab/2011b/lib:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=/opt/matlab/2011b/lib:$LD_LIBRARY_PATH
 </file>
 
 </post>

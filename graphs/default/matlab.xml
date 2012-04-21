@@ -34,10 +34,10 @@ All rights reserved. Rocks(r) v5.1 www.rocksclusters.org
 </order>
 
 <edge from="base">
-  <to>ddt-roll-test</to>
+  <to>matlab-roll-test</to>
 </edge>
 <order head="base">
-  <tail>ddt-roll-test</tail>
+  <tail>matlab-roll-test</tail>
 </order>
 
 </graph>
