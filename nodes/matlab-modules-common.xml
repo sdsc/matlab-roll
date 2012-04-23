@@ -48,7 +48,7 @@ prepend-path  LD_LIBRARY_PATH /opt/matlab/2011b/lib:$LD_LIBRARY_PATH
 
 <file name="/opt/modulefiles/applications/matlab/.version.2011b">
 #%Module1.0
-set ModulesVersion "3.0"
+set ModulesVersion "2011b"
 </file>
 
   /bin/ln -s /opt/modulefiles/applications/matlab/.version.2011b \
