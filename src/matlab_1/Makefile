@@ -64,11 +64,13 @@ build:
 
 
 install::
-	mkdir -p $(ROOT)/$(PKGROOT)
+	mkdir -p $(ROOT)/$(PKGROOT)/bin
 	( \
            cd $(REDHAT.ROOT)/src/build-matlab; \
-           cp -r  [a-s]* tr* X11 $(ROOT)/$(PKGROOT); \
-           rm -rf [a-s]* tr* X11 \
+           cp -r  a* [c-h]* tr* X11 $(ROOT)/$(PKGROOT); \
+           cp -r  bin/[a-f]*  bin/[h-z]* $(ROOT)/$(PKGROOT)/bin; \
+           rm -rf -r  a* [c-h]* tr* X11; \
+           rm -rf  bin/[a-f]*  bin/[h-z]* \
         )
 
 clean::
