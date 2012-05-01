@@ -55,35 +55,25 @@
 # @Copyright@
 #
 
-PKGROOT = /opt/$(NAME)/$(VERSION)
-SOURCE = $(NAME)-$(VERSION)
+PKGROOT = /opt/matlab/$(VERSION)
 REDHAT.ROOT = $(PWD)/../../
 
 -include $(ROCKSROOT)/etc/Rules.mk
 
 build:
-	cat $(SOURCE).* | tar zxvf -
-	cp patch-files/installer_input  $(SOURCE)
-	cp patch-files/license.dat  $(SOURCE)
-	cp patch-files/install  $(SOURCE)
-	perl -pi -e "s!ROLLINSTALL!$(REDHAT.ROOT)/src/build-matlab!" $(SOURCE)/installer_input
-	perl -pi -e "s!ROLLPATH!$(PWD)/$(SOURCE)!" $(SOURCE)/installer_input
-	( \
-	   export  -n DISPLAY=; \
-           cd $(SOURCE)/bin/glnxa64; \
-           rm libstdc++.so.6* ;  \
-           cp /usr/lib64/libstdc++.so.6.* .; \
-           ln -s `pwd`/libstdc++.so.6.* libstdc++.so.6; \
-           cd ../..; \
-	   ./install -inputFile installer_input; \
-           mkdir $(REDHAT.ROOT)/src/build-matlab/lib; \
-           cp ../patch-files/lib* $(REDHAT.ROOT)/src/build-matlab/lib; \
-           cp ../patch-files/*.sh $(REDHAT.ROOT)/src/build-matlab/toolbox/local; \
-           cp ../patch-files/*.m $(REDHAT.ROOT)/src/build-matlab/toolbox/local \
-        )
 
 install::
-	mkdir -p $(ROOT)/$(PKGROOT)
+	mkdir -p $(ROOT)/$(PKGROOT)/bin/glnxa64
+	( \
+           cd $(REDHAT.ROOT)/src/build-matlab/bin/glnxa64; \
+           cp -d lib[m-z]* $(ROOT)/$(PKGROOT)/bin/glnxa64; \
+           rm -rf  lib[m-z]*; \
+           cd $(REDHAT.ROOT)/src/build-matlab; \
+           cp -r -d [i-m]* $(ROOT)/$(PKGROOT); \
+           cp -r -d [A-Z]* $(ROOT)/$(PKGROOT); \
+           rm -rf  [i-m]* \
+           rm -rf  [A-Z]* \
+        )
 
 clean::
 	rm -rf $(SOURCE)

@@ -66,8 +66,8 @@ install::
 	mkdir -p $(ROOT)/$(PKGROOT)/toolbox
 	( \
            cd $(REDHAT.ROOT)/src/build-matlab/toolbox; \
-           cp -r  [s-z]* $(ROOT)/$(PKGROOT)/toolbox; \
-           rm -rf  [s-z]* \
+           cp -r -d [d-m]* $(ROOT)/$(PKGROOT)/toolbox; \
+           rm -rf [d-m]* \
         )
 
 clean::

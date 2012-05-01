@@ -68,8 +68,10 @@ install::
            cd $(REDHAT.ROOT)/src/build-matlab/bin/glnxa64; \
            cp -d -r  [a-k]* [m-z]* $(ROOT)/$(PKGROOT)/bin/glnxa64; \
            cp -d lib[a-l]* $(ROOT)/$(PKGROOT)/bin/glnxa64; \
+           cp -d -r l[a-k]* l[m-z]*  $(ROOT)/$(PKGROOT)/bin/glnxa64; \
            rm -rf  [a-k]* [m-z]* ; \
-           rm lib[a-l]* \
+           rm -rf lib[a-l]*; \
+           rm -rf l[a-k]* l[m-z]* \
         )
 
 clean::
