@@ -62,16 +62,12 @@ REDHAT.ROOT = $(PWD)/../../
 
 build:
 
+
 install::
-	mkdir -p $(ROOT)/$(PKGROOT)/bin/glnxa64
+	mkdir -p $(PKGROOT)/$(ROOT)
 	( \
-           cd $(REDHAT.ROOT)/src/build-matlab/bin/glnxa64; \
-           cp -d -r  [a-k]* [m-z]* $(ROOT)/$(PKGROOT)/bin/glnxa64; \
-           cp -d lib[a-l]* $(ROOT)/$(PKGROOT)/bin/glnxa64; \
-           cp -d -r l[a-k]* l[m-z]*  $(ROOT)/$(PKGROOT)/bin/glnxa64; \
-           rm -rf  [a-k]* [m-z]* ; \
-           rm -rf lib[a-l]*; \
-           rm -rf l[a-k]* l[m-z]* \
+             cd  $(REDHAT.ROOT)/src/build-matlab_2; \
+             cp -r * -d $(ROOT)/$(PKGROOT) \
         )
 
 clean::

@@ -62,15 +62,12 @@ REDHAT.ROOT = $(PWD)/../../
 
 build:
 
+
 install::
-	mkdir -p $(ROOT)/$(PKGROOT)/toolbox
+	mkdir -p $(PKGROOT)/$(ROOT)
 	( \
-           cd $(REDHAT.ROOT)/src/build-matlab; \
-           cp -r -d [n-s]* [u-z]* $(ROOT)/$(PKGROOT); \
-           rm -rf [n-s]* [u-z]*; \
-           cd $(REDHAT.ROOT)/src/build-matlab/toolbox; \
-           cp -r -d [a-c]* $(ROOT)/$(PKGROOT)/toolbox; \
-           rm -rf  [a-c]*  \
+             cd  $(REDHAT.ROOT)/src/build-matlab_4; \
+             cp -r * -d $(ROOT)/$(PKGROOT) \
         )
 
 clean::
