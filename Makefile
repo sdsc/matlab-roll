@@ -64,3 +64,4 @@ clean::
 
 cvsclean: clean
 	rm -fr RPMS SRPMS
+	rm -fr src/build-*
