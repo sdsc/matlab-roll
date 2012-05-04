@@ -65,4 +65,4 @@ SRCDIRS = `find . -maxdepth 1 -type d \
         -not -name matlab_7 \
         -not -name matlab_8 \
         -not -name matlab_9 \
-        -not .` matlab_1 matlab_2 matlab_3 matlab_4 matlab_5 matlab_6 matlab_7 matlab_8 matlab_9
+        -not -name .` matlab_1 matlab_2 matlab_3 matlab_4 matlab_5 matlab_6 matlab_7 matlab_8 matlab_9
