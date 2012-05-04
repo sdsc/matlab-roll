@@ -63,54 +63,69 @@ PACKAGES=8
 -include $(ROCKSROOT)/etc/Rules.mk
 
 build:
-#	cat $(SOURCE).* | tar zxvf -
-#	cp patch-files/installer_input  $(SOURCE)
-#	cp patch-files/license.dat  $(SOURCE)
-#	cp patch-files/install  $(SOURCE)
-#	perl -pi -e "s!ROLLINSTALL!$(REDHAT.ROOT)/src/build-matlab!" $(SOURCE)/installer_input
-#	perl -pi -e "s!ROLLPATH!$(PWD)/$(SOURCE)!" $(SOURCE)/installer_input
-#	( \
-#	   export  -n DISPLAY=; \
-#           cd $(SOURCE)/bin/glnxa64; \
-#           rm libstdc++.so.6* ;  \
-#           cp /usr/lib64/libstdc++.so.6.* .; \
-#           ln -s `pwd`/libstdc++.so.6.* libstdc++.so.6; \
-#           cd ../..; \
-#	   ./install -inputFile installer_input; \
-#           mkdir $(REDHAT.ROOT)/src/build-matlab/lib; \
-#           cp ../patch-files/lib* $(REDHAT.ROOT)/src/build-matlab/lib; \
-#           cp ../patch-files/*.sh $(REDHAT.ROOT)/src/build-matlab/toolbox/local; \
-#           cp ../patch-files/*.m $(REDHAT.ROOT)/src/build-matlab/toolbox/local \
-#        )
+	cat $(SOURCE).* | tar zxvf -
+	cp patch-files/installer_input  $(SOURCE)
+	cp patch-files/license.dat  $(SOURCE)
+	cp patch-files/install  $(SOURCE)
+	perl -pi -e "s!ROLLINSTALL!$(REDHAT.ROOT)/src/build-matlab!" $(SOURCE)/installer_input
+	perl -pi -e "s!ROLLPATH!$(PWD)/$(SOURCE)!" $(SOURCE)/installer_input
+	( \
+            export  -n DISPLAY=; \
+            cd $(SOURCE)/bin/glnxa64; \
+            rm libstdc++.so.6* ;  \
+            cp /usr/lib64/libstdc++.so.6.* .; \
+            ln -s `pwd`/libstdc++.so.6.* libstdc++.so.6; \
+            cd ../..; \
+            ./install -inputFile installer_input; \
+            mkdir $(REDHAT.ROOT)/src/build-matlab/lib; \
+            cp ../patch-files/lib* $(REDHAT.ROOT)/src/build-matlab/lib; \
+            cp ../patch-files/*.sh $(REDHAT.ROOT)/src/build-matlab/toolbox/local; \
+            cp ../patch-files/*.m $(REDHAT.ROOT)/src/build-matlab/toolbox/local \
+         )
 install::
 	mkdir -p $(ROOT)/$(PKGROOT)
 	( \
-           packageCount=1;
+           packageCount=1; \
            mkdir  -p $(REDHAT.ROOT)/src/build-matlab_$$packageCount; \
            cd  $(REDHAT.ROOT)/src/build-matlab; \
-           find . ! -type d -exec ls -l {} \; >$$$$.tmp; \
+           find . ! -type d -exec ls -l {} \; >../$$$$.tmp; \
+           find . \( -name .\* -a ! -type d \) -exec ls -l {} \; >>../$$$$.tmp; \
            sum=0; \
            total=`du -b -s|awk '{print $$1}'`; \
            maxPackageSize=$$(( $$total / $(PACKAGES) )); \
            echo "MAX SIZE=$$maxPackageSize"; \
-           exec <19060.tmp; \
+           exec <../$$$$.tmp; \
+           cat /dev/null > ../.files; \
            while read line; do \
-             fileSize=`echo $$line |awk '{print $$5}'`; \
-             fileName=`echo $$line |awk '{print $$9}'`; \
-             sum=$$(( $$fileSize + $$sum )); \
-             if test $$sum -ge $$maxPackageSize; then \
-                sum=$$(( $$sum - $$fileSize )); \
-                echo $$sum; \
-                sum=$$fileSize; \
-             else; \
-                cp $fileName build-matlab_$$packageCount; \
-             fi; \
+               fileSize=`echo $$line |awk '{print $$5}'`; \
+               fileName=`echo $$line |awk '{print $$9}'`; \
+               sum=$$(( $$sum + $$fileSize )); \
+               if test $$sum -ge $$maxPackageSize; then \
+                  sum=$$(( $$sum - $$fileSize )); \
+                  echo "NEW PACKAGE: OLD SUM $$sum"; \
+                  tar cvf ../package.tar `cat ../.files`; \
+                  cd ../build-matlab_$$packageCount; \
+                  tar xvf ../package.tar; \
+                  cd ../build-matlab; \
+                  sum=$$fileSize; \
+                  packageCount=$$(( $$packageCount + 1 )); \
+                  mkdir  -p $(REDHAT.ROOT)/src/build-matlab_$$packageCount; \
+                  cat /dev/null > ../.files; \
+               fi; \
            done; \
+           tar cvf ../package.tar `cat ../.files`; \
+           cd ../build-matlab_$$packageCount; \
+           tar xvf ../package.tar; \
+           cd ../build-matlab; \
+           mkdir -p ../build-matlab_$$packageCount/appdata/products; \
+           mkdir -p ../build-matlab_$$packageCount/appdata/components; \
+           cp -r -d appdata/products/* ../build-matlab_$$packageCount/appdata/products; \
+           cp -r -d appdata/components/* ../build-matlab_$$packageCount/appdata/components; \
+           rm -f ../$$$$.tmp; \
+           rm -f ../.files; \
+           rm -f ../package.tar \
         )
 
 
 clean::
 	rm -rf $(SOURCE)
-#          while read line; do \ 
-#             echo $$line; \
-#          done \
