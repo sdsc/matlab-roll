@@ -110,8 +110,10 @@ install::
                   sum=$$fileSize; \
                   packageCount=$$(( $$packageCount + 1 )); \
                   mkdir  -p $(REDHAT.ROOT)/src/build-matlab_$$packageCount; \
+                  exit; \
                   cat /dev/null > $(REDHAT.ROOT)/src/.files; \
                fi; \
+               echo $$fileName >> $(REDHAT.ROOT)/src/.files; \
            done; \
            tar cvf $(REDHAT.ROOT)/src/package.tar `cat $(REDHAT.ROOT)/src/.files`; \
            cd $(REDHAT.ROOT)/src/build-matlab_$$packageCount; \

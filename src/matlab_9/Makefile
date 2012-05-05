@@ -64,7 +64,7 @@ build:
 
 
 install::
-	mkdir -p $(PKGROOT)/$(ROOT)
+	mkdir -p $(ROOT)/$(PKGROOT)
 	( \
              cd  $(REDHAT.ROOT)/src/build-matlab_9; \
              cp -r * -d $(ROOT)/$(PKGROOT) \
