@@ -67,6 +67,7 @@ build:
 	cp patch-files/installer_input  $(SOURCE)
 	cp patch-files/license.dat  $(SOURCE)
 	cp patch-files/install  $(SOURCE)
+	cp patch-files/network.lic  $(SOURCE)/licenses
 	perl -pi -e "s!ROLLINSTALL!$(REDHAT.ROOT)/src/build-matlab!" $(SOURCE)/installer_input
 	perl -pi -e "s!ROLLPATH!$(PWD)/$(SOURCE)!" $(SOURCE)/installer_input
 	( \
@@ -110,7 +111,6 @@ install::
                   sum=$$fileSize; \
                   packageCount=$$(( $$packageCount + 1 )); \
                   mkdir  -p $(REDHAT.ROOT)/src/build-matlab_$$packageCount; \
-                  exit; \
                   cat /dev/null > $(REDHAT.ROOT)/src/.files; \
                fi; \
                echo $$fileName >> $(REDHAT.ROOT)/src/.files; \

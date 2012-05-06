@@ -55,6 +55,10 @@ set ModulesVersion "2011b"
              /opt/modulefiles/applications/matlab/.version
 
 fi
+chgrp -R 6367 /opt/matlab
+find /opt/matlab -perm 0755 -exec chmod 0750 {} \;
+find /opt/matlab -perm 0700 -exec chmod 0750 {} \;
+find /opt/matlab -perm 0444 -exec chmod 0640 {} \;
 
 </post>
 
