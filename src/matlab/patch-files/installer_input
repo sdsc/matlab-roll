@@ -163,7 +163,7 @@ licensePath=ROLLPATH/license.dat
 
 
 ################# Begin - Windows Only Options ################ 
-##
+## 
 ## CHOOSE TO SET FILE ASSOCIATIONS 
 ## 
 ## Set to true if you want the installer to associate file types used by MathWorks 
@@ -177,6 +177,7 @@ licensePath=ROLLPATH/license.dat
 
 # setFileAssoc= 
 
+##
 ## CHOOSE TO CREATE WINDOWS DESKTOP SHORTCUT
 ##
 ## Set to true if you would like the installer to create a desktop shortcut icon
@@ -243,7 +244,6 @@ licensePath=ROLLPATH/license.dat
 #product.Data_Acquisition_Toolbox
 #product.Database_Toolbox
 #product.Datafeed_Toolbox
-#product.EDA_Simulator_Link
 #product.Econometrics_Toolbox
 #product.Embedded_Coder
 #product.Filter_Design_HDL_Coder
@@ -254,6 +254,8 @@ licensePath=ROLLPATH/license.dat
 #product.Fuzzy_Logic_Toolbox
 #product.Gauges_Blockset
 #product.Global_Optimization_Toolbox
+#product.HDL_Coder
+#product.HDL_Verifier
 #product.IEC_Certification_Kit
 #product.Image_Acquisition_Toolbox
 #product.Image_Processing_Toolbox
@@ -296,7 +298,6 @@ licensePath=ROLLPATH/license.dat
 #product.Simulink_Design_Optimization
 #product.Simulink_Design_Verifier
 #product.Simulink_Fixed_Point
-#product.Simulink_HDL_Coder
 #product.Simulink_PLC_Coder
 #product.Simulink_Report_Generator
 #product.Simulink_Verification_and_Validation

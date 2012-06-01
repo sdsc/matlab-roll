@@ -66,7 +66,6 @@ build:
 	cat $(SOURCE).* | tar zxvf -
 	cp patch-files/installer_input  $(SOURCE)
 	cp patch-files/license.dat  $(SOURCE)
-	cp patch-files/install  $(SOURCE)
 	cp patch-files/network.lic  $(SOURCE)/licenses
 	perl -pi -e "s!ROLLINSTALL!$(REDHAT.ROOT)/src/build-matlab!" $(SOURCE)/installer_input
 	perl -pi -e "s!ROLLPATH!$(PWD)/$(SOURCE)!" $(SOURCE)/installer_input
