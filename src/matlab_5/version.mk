@@ -1,5 +1,5 @@
 NAME    = matlab_5
-VERSION = 2011b
+VERSION = 2012a
 RELEASE = 1
 RPM.EXTRAS = "Autoprov: 0"
 
