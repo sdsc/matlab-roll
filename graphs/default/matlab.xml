@@ -22,17 +22,6 @@ All rights reserved. Rocks(r) v5.1 www.rocksclusters.org
   <tail>matlab-common</tail>
 </order>
 
-<edge from="envmodules-common">
-  <to>matlab-modules-common</to>
-</edge>
-<order head="envmodules-common">
-  <tail>matlab-modules-common</tail>
-</order>
-
-<order head="matlab-common">
-  <tail>matlab-modules-common</tail>
-</order>
-
 <edge from="base">
   <to>matlab-roll-test</to>
 </edge>

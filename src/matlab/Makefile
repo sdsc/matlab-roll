@@ -84,6 +84,7 @@ build:
          )
 install::
 	mkdir -p $(ROOT)/$(PKGROOT)
+	mkdir -p $(REDHAT.ROOT)/src/build-matlab-modules
 	( \
            packageCount=1; \
            mkdir  -p $(REDHAT.ROOT)/src/build-matlab_$$packageCount; \
@@ -126,6 +127,8 @@ install::
            rm -f $(REDHAT.ROOT)/src/.files; \
            rm -f $(REDHAT.ROOT)/src/package.tar \
         )
+	cat matlab.module | perl -pi -e "s!MODULEROOT!/opt/modulefiles/applications/matlab!g;s!VERSION!$(VERSION)!g" \
+          > $(REDHAT.ROOT)/src/build-matlab-modules/$(NAME).module
 
 
 clean::

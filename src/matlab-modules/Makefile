@@ -1,3 +1,4 @@
+#
 # $Id$
 #
 # @Copyright@
@@ -52,18 +53,25 @@
 # IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 # 
 # @Copyright@
-#
 
-SRCDIRS = `find . -maxdepth 1 -type d \
-	-not -name CVS \
-        -not -name matlab_1 \
-        -not -name matlab_2 \
-        -not -name matlab_3 \
-        -not -name matlab_4 \
-        -not -name matlab_5 \
-        -not -name matlab_6 \
-        -not -name matlab_7 \
-        -not -name matlab_8 \
-        -not -name matlab_9 \
-        -not -name matlab-modules \
-        -not -name .` matlab_1 matlab_2 matlab_3 matlab_4 matlab_5 matlab_6 matlab_7 matlab_8 matlab_9 matlab-modules
+REDHAT.ROOT     = $(PWD)/../../
+
+-include $(ROCKSROOT)/etc/Rules.mk
+include Rules.mk
+
+
+build:
+
+install::
+	( \
+           modulefiles=`ls $(REDHAT.ROOT)/src/build-matlab-modules/*.module 2>/dev/null`; \
+           if test  -n "$${modulefiles}"; then \
+                for modulefile in $${modulefiles}; do \
+                    perl -pi -e "s!ROOT_PKGROOT!$(ROOT)!g" $${modulefile}; \
+                    bash $${modulefile}; \
+                done; \
+           fi \
+        )
+
+
+clean::
