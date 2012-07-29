@@ -66,8 +66,6 @@ build:
 	cat $(SOURCE).* | tar zxvf -
 	cp patch-files/installer_input  $(SOURCE)
 	cp patch-files/install  $(SOURCE)
-	cp patch-files/license.dat  $(SOURCE)
-	cp patch-files/network.lic  $(SOURCE)/licenses
 	perl -pi -e "s!ROLLINSTALL!$(REDHAT.ROOT)/src/build-matlab!" $(SOURCE)/installer_input
 	perl -pi -e "s!ROLLPATH!$(PWD)/$(SOURCE)!" $(SOURCE)/installer_input
 	( \
@@ -80,6 +78,9 @@ build:
             ./install -inputFile installer_input; \
             mkdir $(REDHAT.ROOT)/src/build-matlab/lib; \
             cp ../patch-files/lib* $(REDHAT.ROOT)/src/build-matlab/lib; \
+	    cp patch-files/license.dat  $(REDHAT.ROOT)/src/build-matlab/licenses; \
+	    perl -pi -e "s!ROLLMATLAB!$(PKGROOT)!" $(REDHAT.ROOT)/src/build-matlab/licenses/license.dat; \
+	    cp patch-files/network.lic  $(REDHAT.ROOT)/src/build-matlab/licenses \
          )
 install::
 	mkdir -p $(ROOT)/$(PKGROOT)
