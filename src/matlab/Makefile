@@ -80,6 +80,7 @@ build:
             ./install -inputFile installer_input; \
             mkdir $(REDHAT.ROOT)/src/build-matlab/lib; \
             cp ../patch-files/lib* $(REDHAT.ROOT)/src/build-matlab/lib; \
+	    cp ../patch-files/license.dat  $(REDHAT.ROOT)/src/build-matlab/licenses \
 	    cp ../patch-files/network.lic  $(REDHAT.ROOT)/src/build-matlab/licenses \
          )
 install::
