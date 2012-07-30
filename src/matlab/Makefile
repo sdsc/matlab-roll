@@ -82,6 +82,7 @@ build:
             cp ../patch-files/lib* $(REDHAT.ROOT)/src/build-matlab/lib; \
 	    cp ../patch-files/license.dat  $(REDHAT.ROOT)/src/build-matlab/licenses \
 	    cp ../patch-files/network.lic  $(REDHAT.ROOT)/src/build-matlab/licenses \
+	    perl -pi -e "s!ROLLMATLAB!$(PKGROOT)!" $(REDHAT.ROOT)/src/build-matlab/licenses/license.dat \
          )
 install::
 	mkdir -p $(ROOT)/$(PKGROOT)
