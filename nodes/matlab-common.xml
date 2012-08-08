@@ -28,17 +28,10 @@ All rights reserved. Rocks(r) v5.1 www.rocksclusters.org
 <package>matlab-modules</package>
 
 <post>
-
-<file name="/etc/profile.d/matlab.csh" perms="0755" >
-set path = ( /opt/matlab/2011b/bin $path )
-setenv LD_LIBRARY_PATH /opt/matlab/2011b/lib:$LD_LIBRARY_PATH
-</file>
-
-<file name="/etc/profile.d/matlab.sh" perms="0755" >
-export PATH=/opt/matlab/2011b/bin:$PATH
-export LD_LIBRARY_PATH=/opt/matlab/2011b/lib:$LD_LIBRARY_PATH
-</file>
-
+chgrp -R 6367 /opt/matlab
+find /opt/matlab -perm 2755 -exec chmod 0750 {} \;
+find /opt/matlab -perm 0444 -exec chmod 0440 {} \;
+find /opt/matlab -perm 0555 -exec chmod 0550 {} \;
 </post>
 
 </kickstart>
