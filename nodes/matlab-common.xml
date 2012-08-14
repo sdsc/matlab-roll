@@ -28,10 +28,13 @@ All rights reserved. Rocks(r) v5.1 www.rocksclusters.org
 <package>matlab-modules</package>
 
 <post>
-chgrp -R 6367 /opt/matlab
-find /opt/matlab -perm 2755 -exec chmod 0750 {} \;
-find /opt/matlab -perm 0444 -exec chmod 0440 {} \;
-find /opt/matlab -perm 0555 -exec chmod 0550 {} \;
+grep -q '^matlab-users:' /etc/group
+if test $? -ne 0; then
+  groupadd matlab-users
+fi
+chgrp -R matlab-users /opt/vasp
+chmod -R g+rX /opt/vasp
+chmod -R o-rwx /opt/vasp
 </post>
 
 </kickstart>
