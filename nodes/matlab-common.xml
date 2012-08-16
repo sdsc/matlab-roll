@@ -32,9 +32,9 @@ grep -q '^matlab-users:' /etc/group
 if test $? -ne 0; then
   groupadd matlab-users
 fi
-chgrp -R matlab-users /opt/vasp
-chmod -R g+rX /opt/vasp
-chmod -R o-rwx /opt/vasp
+chgrp -R matlab-users /opt/matlab
+chmod -R g+rX /opt/matlab
+chmod -R o-rwx /opt/matlab
 </post>
 
 </kickstart>
