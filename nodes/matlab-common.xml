@@ -1,0 +1,40 @@
+<?xml version="1.0" standalone="no"?>
+
+<kickstart>
+
+<description>
+MATLAB
+http://www.mathworks.com
+</description>
+
+<copyright>
+Copyright (c) 2000 - 2011 The Regents of the University of California.
+All rights reserved. Rocks(r) v5.1 www.rocksclusters.org
+</copyright>
+
+<changelog>
+</changelog>
+
+<package>matlab_1</package>
+<package>matlab_2</package>
+<package>matlab_3</package>
+<package>matlab_4</package>
+<package>matlab_5</package>
+<package>matlab_6</package>
+<package>matlab_7</package>
+<package>matlab_8</package>
+<package>matlab_9</package>
+<package>matlab</package>
+<package>matlab-modules</package>
+
+<post>
+grep -q '^matlab-users:' /etc/group
+if test $? -ne 0; then
+  groupadd matlab-users
+fi
+chgrp -R matlab-users /opt/matlab
+chmod -R g+rX /opt/matlab
+chmod -R o-rwx /opt/matlab
+</post>
+
+</kickstart>
