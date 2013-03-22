@@ -212,7 +212,7 @@ licensePath=ROLLPATH/license.dat
 ## 
 ## Set createAccelTask value to false if you do not want to
 ## create an Accelerator task and uncomment the line.
- 
+
 # createAccelTask=
 
 ################ End - Windows Only Options ################ 
@@ -247,10 +247,9 @@ licensePath=ROLLPATH/license.dat
 #product.Econometrics_Toolbox
 #product.Embedded_Coder
 #product.Filter_Design_HDL_Coder
-#product.Financial_Derivatives_Toolbox
+#product.Financial_Instruments_Toolbox
 #product.Financial_Toolbox
-#product.Fixed_Income_Toolbox
-#product.Fixed_Point_Toolbox
+#product.Fixed_Point_Designer
 #product.Fuzzy_Logic_Toolbox
 #product.Gauges_Blockset
 #product.Global_Optimization_Toolbox
@@ -267,6 +266,7 @@ licensePath=ROLLPATH/license.dat
 #product.MATLAB_Coder
 #product.MATLAB_Compiler
 #product.MATLAB_Distributed_Computing_Server
+#product.MATLAB_Production_Server
 #product.MATLAB_Report_Generator
 #product.Mapping_Toolbox
 #product.Model_Predictive_Control_Toolbox
@@ -297,7 +297,6 @@ licensePath=ROLLPATH/license.dat
 #product.Simulink_Control_Design
 #product.Simulink_Design_Optimization
 #product.Simulink_Design_Verifier
-#product.Simulink_Fixed_Point
 #product.Simulink_PLC_Coder
 #product.Simulink_Report_Generator
 #product.Simulink_Verification_and_Validation
@@ -307,6 +306,7 @@ licensePath=ROLLPATH/license.dat
 #product.Symbolic_Math_Toolbox
 #product.System_Identification_Toolbox
 #product.SystemTest
+#product.Trading_Toolbox
 #product.Vehicle_Network_Toolbox
 #product.Wavelet_Toolbox
 #product.xPC_Target
