@@ -1,5 +1,6 @@
 ROLLNAME = matlab
-RELEASE  = 6
+RELEASE  = 7
 COLOR    = orange
 
 REDHAT.ROOT = $(PWD)
+RPM.EXTRAS = "Autoprov: 0"
