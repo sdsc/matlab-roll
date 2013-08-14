@@ -23,6 +23,14 @@ All rights reserved. Rocks(r) v5.1 www.rocksclusters.org
 <package>matlab_6</package>
 <package>matlab_7</package>
 <package>matlab_8</package>
+<package>matlab_9</package>
+<package>matlab_10</package>
+<package>matlab_11</package>
+<package>matlab_12</package>
+<package>matlab_13</package>
+<package>matlab_14</package>
+<package>matlab_15</package>
+<package>matlab_16</package>
 <package>matlab</package>
 <package>matlab-modules</package>
 <package>matlab-roll-test</package>

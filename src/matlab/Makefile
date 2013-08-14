@@ -58,7 +58,7 @@
 PKGROOT = /opt/$(NAME)/$(VERSION)
 SOURCE = $(NAME)-$(VERSION)
 REDHAT.ROOT = $(PWD)/../../
-PACKAGES=8
+PACKAGES=16
 
 -include $(ROCKSROOT)/etc/Rules.mk
 
