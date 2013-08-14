@@ -68,8 +68,9 @@ build:
 	cp patch-files/install  $(SOURCE)
 	perl -pi -e "s!ROLLINSTALL!$(REDHAT.ROOT)/src/build-matlab!" $(SOURCE)/installer_input
 	perl -pi -e "s!ROLLPATH!$(PWD)/$(SOURCE)!" $(SOURCE)/installer_input
-	cp patch-files/license.dat  $(SOURCE); \
-	perl -pi -e "s!ROLLMATLAB!$(PKGROOT)!" $(SOURCE)/license.dat; \
+	cp patch-files/license.dat  $(SOURCE)
+	perl -pi -e "s!ROLLMATLAB!$(PKGROOT)!" $(SOURCE)/license.dat
+	mkdir -p $(ROOT)/$(PKGROOT)/lib
 	( \
             export -n DISPLAY=; \
             cd $(SOURCE)/bin/glnxa64; \
