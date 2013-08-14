@@ -78,8 +78,7 @@ build:
             ln -s `pwd`/libstdc++.so.6.* libstdc++.so.6; \
             cd ../..; \
             ./install -inputFile installer_input; \
-            mkdir $(REDHAT.ROOT)/src/build-matlab/lib; \
-            cp ../patch-files/lib* $(REDHAT.ROOT)/src/build-matlab/lib; \
+            cp ../patch-files/lib* $(ROOT)/$(PKGROOT)/lib; \
 	    cp ../patch-files/license.dat  $(REDHAT.ROOT)/src/build-matlab/licenses; \
 	    cp ../patch-files/network.lic  $(REDHAT.ROOT)/src/build-matlab/licenses; \
 	    perl -pi -e "s!ROLLMATLAB!$(PKGROOT)!" $(REDHAT.ROOT)/src/build-matlab/licenses/license.dat \
