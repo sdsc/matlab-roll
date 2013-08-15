@@ -6,8 +6,6 @@ cat > ROOT_PKGROOTMODULEROOT/VERSION <<END
 module-whatis "matlab"
 module-whatis "Version: VERSION"
 prepend-path PATH /opt/matlab/VERSION//bin
-prepend-path  LD_LIBRARY_PATH /opt/matlab/VERSION/lib
-
 END
 
 chmod 0644  ROOT_PKGROOTMODULEROOT/VERSION
