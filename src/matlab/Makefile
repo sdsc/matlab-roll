@@ -70,7 +70,6 @@ build:
 	perl -pi -e "s!ROLLPATH!$(PWD)/$(SOURCE)!" $(SOURCE)/installer_input
 	cp patch-files/license.dat  $(SOURCE)
 	perl -pi -e "s!ROLLMATLAB!$(PKGROOT)!" $(SOURCE)/license.dat
-	mkdir -p $(ROOT)/$(PKGROOT)/lib
 	( \
             export -n DISPLAY=; \
             cd $(SOURCE)/bin/glnxa64; \
@@ -79,15 +78,15 @@ build:
             ln -s `pwd`/libstdc++.so.6.* libstdc++.so.6; \
             cd ../..; \
             ./install -inputFile installer_input; \
-            cp ../patch-files/lib* $(ROOT)/$(PKGROOT)/lib; \
 	    cp ../patch-files/license.dat  $(REDHAT.ROOT)/src/build-matlab/licenses; \
 	    cp ../patch-files/network.lic  $(REDHAT.ROOT)/src/build-matlab/licenses; \
 	    perl -pi -e "s!ROLLMATLAB!$(PKGROOT)!" $(REDHAT.ROOT)/src/build-matlab/licenses/license.dat \
          )
 install::
-	mkdir -p $(ROOT)/$(PKGROOT)
+	mkdir -p $(ROOT)/$(PKGROOT)/lib
 	mkdir -p $(REDHAT.ROOT)/src/build-matlab-modules
 	( \
+           cp patch-files/lib* $(ROOT)/$(PKGROOT)/lib; \
            packageCount=1; \
            mkdir  -p $(REDHAT.ROOT)/src/build-matlab_$$packageCount; \
            cd  $(REDHAT.ROOT)/src/build-matlab; \
