@@ -38,7 +38,7 @@ All rights reserved. Rocks(r) v5.1 www.rocksclusters.org
 <post>
 grep -q '^matlab-users:' /etc/group
 if test $? -ne 0; then
-  /usr/sbin/groupadd matlab-users
+  /usr/sbin/groupadd -g 6367 matlab-users
 fi
 chgrp -R matlab-users /opt/matlab
 chmod -R g+rX /opt/matlab
