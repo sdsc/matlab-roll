@@ -1,45 +1,45 @@
-#
 # $Id$
 #
 # @Copyright@
-#
-# 				Rocks(tm)
+# 
+# 				Rocks(r)
 # 		         www.rocksclusters.org
-# 		        version 4.3 (Mars Hill)
-#
-# Copyright (c) 2000 - 2011 The Regents of the University of California.
-# All rights reserved.
-#
+# 		         version 5.6 (Emerald Boa)
+# 		         version 6.1 (Emerald Boa)
+# 
+# Copyright (c) 2000 - 2013 The Regents of the University of California.
+# All rights reserved.	
+# 
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are
 # met:
-#
+# 
 # 1. Redistributions of source code must retain the above copyright
 # notice, this list of conditions and the following disclaimer.
-#
+# 
 # 2. Redistributions in binary form must reproduce the above copyright
 # notice unmodified and in its entirety, this list of conditions and the
-# following disclaimer in the documentation and/or other materials provided
+# following disclaimer in the documentation and/or other materials provided 
 # with the distribution.
-#
+# 
 # 3. All advertising and press materials, printed or electronic, mentioning
-# features or use of this software must display the following acknowledgement:
-#
-# 	"This product includes software developed by the Rocks(tm)
+# features or use of this software must display the following acknowledgement: 
+# 
+# 	"This product includes software developed by the Rocks(r)
 # 	Cluster Group at the San Diego Supercomputer Center at the
 # 	University of California, San Diego and its contributors."
-#
+# 
 # 4. Except as permitted for the purposes of acknowledgment in paragraph 3,
 # neither the name or logo of this software nor the names of its
 # authors may be used to endorse or promote products derived from this
 # software without specific prior written permission.  The name of the
 # software includes the following terms, and any derivatives thereof:
-# "Rocks", "Rocks Clusters", and "Avalanche Installer".  For licensing of
-# the associated name, interested parties should contact Technology
-# Transfer & Intellectual Property Services, University of California,
-# San Diego, 9500 Gilman Drive, Mail Code 0910, La Jolla, CA 92093-0910,
+# "Rocks", "Rocks Clusters", and "Avalanche Installer".  For licensing of 
+# the associated name, interested parties should contact Technology 
+# Transfer & Intellectual Property Services, University of California, 
+# San Diego, 9500 Gilman Drive, Mail Code 0910, La Jolla, CA 92093-0910, 
 # Ph: (858) 534-5815, FAX: (858) 534-7345, E-MAIL:invent@ucsd.edu
-#
+# 
 # THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS''
 # AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
 # THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
@@ -51,28 +51,28 @@
 # WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
 # OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 # IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-#
+# 
 # @Copyright@
 #
+# $Log$
 
-PKGROOT = /opt/$(NAME)/$(VERSION)
-SOURCE = $(NAME)-$(VERSION)
-REDHAT.ROOT = $(PWD)/../../
+REDHAT.ROOT = $(CURDIR)/../../
 PACKAGES=16
 
 -include $(ROCKSROOT)/etc/Rules.mk
+include Rules.mk
+include pull.mk
 
-build:
-	cat $(SOURCE).* | tar zxvf -
-	cp patch-files/installer_input  $(SOURCE)
-	cp patch-files/install  $(SOURCE)
-	perl -pi -e "s!ROLLINSTALL!$(REDHAT.ROOT)/src/build-matlab!" $(SOURCE)/installer_input
-	perl -pi -e "s!ROLLPATH!$(PWD)/$(SOURCE)!" $(SOURCE)/installer_input
-	cp patch-files/license.dat  $(SOURCE)
-	perl -pi -e "s!ROLLMATLAB!$(PKGROOT)!" $(SOURCE)/license.dat
+build: $(SRC_DIRS)
+	cp patch-files/installer_input  $(SOURCE_DIR)
+	cp patch-files/install  $(SOURCE_DIR)
+	perl -pi -e "s!ROLLINSTALL!$(REDHAT.ROOT)/src/build-matlab!" $(SOURCE_DIR)/installer_input
+	perl -pi -e "s!ROLLPATH!$(PWD)/$(SOURCE_DIR)!" $(SOURCE_DIR)/installer_input
+	cp patch-files/license.dat  $(SOURCE_DIR)
+	perl -pi -e "s!ROLLMATLAB!$(PKGROOT)!" $(SOURCE_DIR)/license.dat
 	( \
             export -n DISPLAY=; \
-            cd $(SOURCE)/bin/glnxa64; \
+            cd $(SOURCE_DIR)/bin/glnxa64; \
             rm libstdc++.so.6* ;  \
             cp /usr/lib64/libstdc++.so.6.* .; \
             ln -s `pwd`/libstdc++.so.6.* libstdc++.so.6; \
@@ -82,6 +82,8 @@ build:
 	    cp ../patch-files/network.lic  $(REDHAT.ROOT)/src/build-matlab/licenses; \
 	    perl -pi -e "s!ROLLMATLAB!$(PKGROOT)!" $(REDHAT.ROOT)/src/build-matlab/licenses/license.dat \
          )
+	@echo "::: Package $(NAME) build complete :::"
+
 install::
 	mkdir -p $(REDHAT.ROOT)/src/build-matlab-modules
 	( \
@@ -128,7 +130,8 @@ install::
         )
 	cat matlab.module | perl -pi -e "s!MODULEROOT!/opt/modulefiles/applications/matlab!g;s!VERSION!$(VERSION)!g" \
           > $(REDHAT.ROOT)/src/build-matlab-modules/$(NAME).module
+	@echo "::: Package $(NAME) install complete :::"
 
 
 clean::
-	rm -rf $(SOURCE)
+	rm -rf $(SOURCE_DIR)
