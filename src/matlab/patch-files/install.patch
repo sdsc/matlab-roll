@@ -1,0 +1,81 @@
+--- matlab-2013a/install	2013-01-16 09:10:28.000000000 -0800
++++ patch-files/install	2013-11-15 16:48:13.000000000 -0800
+@@ -496,7 +496,7 @@
+     JAVA_DIR="$TEMP_DIR/java"
+     JAR_LOC="$JAVA_DIR/jar"
+     JAREXT_LOC="$JAVA_DIR/jarext"
+-    copyDirWritable "$ROOT/java" "$JAVA_DIR"
++    copyDirWritable "$RROOT/java" "$JAVA_DIR"
+     }
+ #=======================================================================
+     doLinuxCheck () {
+@@ -520,7 +520,7 @@
+ 
+     MAIN_CLASS="com/mathworks/professionalinstaller/Launcher"
+ 
+-    BOOTSTRAP_PROPERTIES=$ROOT/java/bootstrap.properties
++    BOOTSTRAP_PROPERTIES=$RROOT/java/bootstrap.properties
+ 
+     if [ -f "$BOOTSTRAP_PROPERTIES" ]; then
+         MAIN_CLASS_OVERRIDE=`grep -i mainclass "$BOOTSTRAP_PROPERTIES" | awk -F= '{ print $2 }' | sed 's/ //g'`
+@@ -556,7 +556,7 @@
+     SHOW_SPLASH=1
+ 
+ #   Set default values for some variables if they are not set yet.
+-    if [ "$ROOT" = "" ]; then
++    if [ "$RROOT" = "" ]; then
+         SETUP_FILE=`realfilepath "$0"`
+         ROOT=`dirname "$SETUP_FILE"`
+     fi
+@@ -594,8 +594,8 @@
+                 else
+                     shift
+                     ROOT=$1;
+-                    if [ ! -d "$ROOT" ]; then
+-                        echo "The directory $ROOT does not exist."
++                    if [ ! -d "$RROOT" ]; then
++                        echo "The directory $RROOT does not exist."
+                         stat=""
+                     fi
+                 fi
+@@ -676,11 +676,11 @@
+     doLinuxCheck
+ 
+ #   Determine the java vm path for each platform.
+-    setVMpath "$ROOT/sys/java"
++    setVMpath "$RROOT/sys/java"
+     copyJREAndJarsToTmp
+ 
+ #   Set up some variables for the VM environment.
+-    copyDirWritable "$ROOT/bin/$ARCH" "$TEMP_DIR/bin/$ARCH"
++    copyDirWritable "$RROOT/bin/$ARCH" "$TEMP_DIR/bin/$ARCH"
+     setVMenvironment "$TEMP_DIR/bin/$ARCH"
+ 
+ #   Get the jar directories
+@@ -691,22 +691,22 @@
+ 
+ #   Set up splash option
+     if [ $SHOW_SPLASH -eq 1 ]; then
+-        SPLASH_OPTION="-splash:\"$ROOT/java/splash.png\""
++        SPLASH_OPTION="-splash:\"$RROOT/java/splash.png\""
+     else
+         SPLASH_OPTION=""
+     fi
+ 
+ #   Set up java command to run.
+     if [ $ISMAC -eq 1 ]; then
+-        XTRAFLAGS="-d64 -Xdock:name=\"Install MATLAB\" -Xdock:icon=\"$ROOT/InstallForMacOSX.app/Contents/Resources/membrane.icns\""
++        XTRAFLAGS="-d64 -Xdock:name=\"Install MATLAB\" -Xdock:icon=\"$RROOT/InstallForMacOSX.app/Contents/Resources/membrane.icns\""
+     fi
+     java_exe=$JRE_LOC/bin/java
+-    java_cmd="$java_exe -Xmx512m $XTRAFLAGS $SPLASH_OPTION -Djava.ext.dirs=$JAR_SEARCH_PATH $JAVA_LAUNCH_TARGET -root \"$ROOT\" -tmpdir \"$TEMP_DIR\" $arglist"
++    java_cmd="$java_exe -Xmx512m $XTRAFLAGS $SPLASH_OPTION -Djava.ext.dirs=$JAR_SEARCH_PATH $JAVA_LAUNCH_TARGET -root \"$RROOT\" -tmpdir \"$TEMP_DIR\" $arglist"
+ 
+ #
+     if [ "$VERBOSE" = "1" ]; then
+ #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+-    echo "->  DVD                 = $ROOT"
++    echo "->  DVD                 = $RROOT"
+     echo "->  ARCH                = $ARCH"
+     echo "->  DISPLAY             = $DISPLAY"
+     echo "->  TESTONLY            = $TESTONLY"
