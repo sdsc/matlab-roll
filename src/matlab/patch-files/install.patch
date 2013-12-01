@@ -1,5 +1,5 @@
 --- matlab-2013a/install	2013-01-16 09:10:28.000000000 -0800
-+++ patch-files/install	2013-11-15 16:48:13.000000000 -0800
++++ patch-files/install	2013-11-30 21:48:45.128071405 -0800
 @@ -496,7 +496,7 @@
      JAVA_DIR="$TEMP_DIR/java"
      JAR_LOC="$JAVA_DIR/jar"
@@ -18,21 +18,26 @@
  
      if [ -f "$BOOTSTRAP_PROPERTIES" ]; then
          MAIN_CLASS_OVERRIDE=`grep -i mainclass "$BOOTSTRAP_PROPERTIES" | awk -F= '{ print $2 }' | sed 's/ //g'`
-@@ -556,7 +556,7 @@
+@@ -556,9 +556,9 @@
      SHOW_SPLASH=1
  
  #   Set default values for some variables if they are not set yet.
 -    if [ "$ROOT" = "" ]; then
 +    if [ "$RROOT" = "" ]; then
          SETUP_FILE=`realfilepath "$0"`
-         ROOT=`dirname "$SETUP_FILE"`
+-        ROOT=`dirname "$SETUP_FILE"`
++        RROOT=`dirname "$SETUP_FILE"`
      fi
-@@ -594,8 +594,8 @@
+ 
+     while [ "$stat" = "OK" -a  $# -gt 0 ]; do
+@@ -593,9 +593,9 @@
+                     stat=""
                  else
                      shift
-                     ROOT=$1;
+-                    ROOT=$1;
 -                    if [ ! -d "$ROOT" ]; then
 -                        echo "The directory $ROOT does not exist."
++                    RROOT=$1;
 +                    if [ ! -d "$RROOT" ]; then
 +                        echo "The directory $RROOT does not exist."
                          stat=""
