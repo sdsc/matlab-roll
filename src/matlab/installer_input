@@ -1,6 +1,8 @@
 destinationFolder=ROLLINSTALL
-fileInstallationKey=FILEINSTALLATIONKEY
+fileInstallationKey=FIK
 agreeToLicense=yes
 outputFile=/tmp/matlab.log
 mode=silent
 licensePath=ROLLPATH/license.dat
+lmgrFiles=false
+lmgrService=false
