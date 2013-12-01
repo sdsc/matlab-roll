@@ -56,31 +56,29 @@
 #
 # $Log$
 
-REDHAT.ROOT = $(CURDIR)/../../
+REDHAT.ROOT = $(shell readlink -f ${CURDIR}/../../)
 PACKAGES=16
 
 -include $(ROCKSROOT)/etc/Rules.mk
 include Rules.mk
 include pull.mk
 
+FIK := $(shell cat fik.txt)
+
 build: $(SRC_DIRS)
-	cp patch-files/installer_input  $(SOURCE_DIR)
-	cp patch-files/install  $(SOURCE_DIR)
+	cp installer_input $(SOURCE_DIR)
+	patch -b $(SOURCE_DIR)/install patch-files/install.patch
+	mkdir -p $(REDHAT.ROOT)/src/build-matlab
 	perl -pi -e "s!ROLLINSTALL!$(REDHAT.ROOT)/src/build-matlab!" $(SOURCE_DIR)/installer_input
-	perl -pi -e "s!ROLLPATH!$(PWD)/$(SOURCE_DIR)!" $(SOURCE_DIR)/installer_input
-	cp patch-files/license.dat  $(SOURCE_DIR)
-	perl -pi -e "s!ROLLMATLAB!$(PKGROOT)!" $(SOURCE_DIR)/license.dat
+	perl -pi -e "s!FIK!$(FIK)!" $(SOURCE_DIR)/installer_input
+	perl -pi -e "s!ROLLPATH!$(CURDIR)/$(SOURCE_DIR)!" $(SOURCE_DIR)/installer_input
+	cp license.dat $(SOURCE_DIR)
 	( \
-            export -n DISPLAY=; \
-            cd $(SOURCE_DIR)/bin/glnxa64; \
-            rm libstdc++.so.6* ;  \
-            cp /usr/lib64/libstdc++.so.6.* .; \
-            ln -s `pwd`/libstdc++.so.6.* libstdc++.so.6; \
-            cd ../..; \
-            ./install -inputFile installer_input; \
-	    cp ../patch-files/license.dat  $(REDHAT.ROOT)/src/build-matlab/licenses; \
-	    cp ../patch-files/network.lic  $(REDHAT.ROOT)/src/build-matlab/licenses; \
-	    perl -pi -e "s!ROLLMATLAB!$(PKGROOT)!" $(REDHAT.ROOT)/src/build-matlab/licenses/license.dat \
+		export -n DISPLAY=; \
+		cd $(SOURCE_DIR); \
+		./install -inputFile installer_input ; \
+		mkdir -p $(REDHAT.ROOT)/src/build-matlab/licenses; \
+		cp license.dat $(REDHAT.ROOT)/src/build-matlab/licenses/license.lic; \
          )
 	@echo "::: Package $(NAME) build complete :::"
 
