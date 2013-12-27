@@ -74,4 +74,5 @@ SRCDIRS = `find . -maxdepth 1 -type d \
         -not -name matlab_16 \
         -not -name matlab_17 \
         -not -name matlab-modules \
-        -not -name .` matlab_1 matlab_2 matlab_3 matlab_4 matlab_5 matlab_6 matlab_7 matlab_8 matlab_9 matlab_10 matlab_11 matlab_12 matlab_13 matlab_14 matlab_15 matlab_16 matlab_17 matlab-modules
+        -not -name matlab-license-files \
+        -not -name .` matlab_1 matlab_2 matlab_3 matlab_4 matlab_5 matlab_6 matlab_7 matlab_8 matlab_9 matlab_10 matlab_11 matlab_12 matlab_13 matlab_14 matlab_15 matlab_16 matlab_17 matlab-modules matlab-license-files
