@@ -31,8 +31,10 @@ All rights reserved. Rocks(r) v5.1 www.rocksclusters.org
 <package>matlab_14</package>
 <package>matlab_15</package>
 <package>matlab_16</package>
+<package>matlab_17</package>
 <package>matlab</package>
 <package>matlab-modules</package>
+<package>matlab-license-files</package>
 <package>matlab-roll-test</package>
 
 </kickstart>
