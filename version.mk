@@ -1,5 +1,5 @@
 ROLLNAME = matlab
-RELEASE  = 7
+RELEASE  = 0
 COLOR    = orange
 
 REDHAT.ROOT = $(PWD)
