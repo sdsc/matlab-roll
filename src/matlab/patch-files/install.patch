@@ -1,6 +1,6 @@
---- matlab-2013a/install	2013-01-16 09:10:28.000000000 -0800
-+++ patch-files/install	2013-11-30 21:48:45.128071405 -0800
-@@ -496,7 +496,7 @@
+--- matlab-2013b/install	2013-12-02 12:44:59.000000000 -0800
++++ install	2013-12-02 14:43:58.000000000 -0800
+@@ -476,7 +476,7 @@
      JAVA_DIR="$TEMP_DIR/java"
      JAR_LOC="$JAVA_DIR/jar"
      JAREXT_LOC="$JAVA_DIR/jarext"
@@ -9,7 +9,7 @@
      }
  #=======================================================================
      doLinuxCheck () {
-@@ -520,7 +520,7 @@
+@@ -501,7 +501,7 @@
  
      MAIN_CLASS="com/mathworks/professionalinstaller/Launcher"
  
@@ -18,8 +18,17 @@
  
      if [ -f "$BOOTSTRAP_PROPERTIES" ]; then
          MAIN_CLASS_OVERRIDE=`grep -i mainclass "$BOOTSTRAP_PROPERTIES" | awk -F= '{ print $2 }' | sed 's/ //g'`
-@@ -556,9 +556,9 @@
+@@ -532,7 +532,7 @@
+     TEMP_DIR="/tmp/mathworks_$$"
+     JRE_LOC=
+     XTRAFLAGS=
+-    ROOT=
++    RROOT=
+     TESTONLY=0
+     arglist=
      SHOW_SPLASH=1
+@@ -540,9 +540,9 @@
+     BOOTSTRAP_PATH=
  
  #   Set default values for some variables if they are not set yet.
 -    if [ "$ROOT" = "" ]; then
@@ -30,7 +39,7 @@
      fi
  
      while [ "$stat" = "OK" -a  $# -gt 0 ]; do
-@@ -593,9 +593,9 @@
+@@ -577,9 +577,9 @@
                      stat=""
                  else
                      shift
@@ -43,7 +52,7 @@
                          stat=""
                      fi
                  fi
-@@ -676,11 +676,11 @@
+@@ -667,11 +667,11 @@
      doLinuxCheck
  
  #   Determine the java vm path for each platform.
@@ -57,7 +66,7 @@
      setVMenvironment "$TEMP_DIR/bin/$ARCH"
  
  #   Get the jar directories
-@@ -691,22 +691,22 @@
+@@ -682,7 +682,7 @@
  
  #   Set up splash option
      if [ $SHOW_SPLASH -eq 1 ]; then
@@ -66,11 +75,13 @@
      else
          SPLASH_OPTION=""
      fi
- 
- #   Set up java command to run.
-     if [ $ISMAC -eq 1 ]; then
--        XTRAFLAGS="-d64 -Xdock:name=\"Install MATLAB\" -Xdock:icon=\"$ROOT/InstallForMacOSX.app/Contents/Resources/membrane.icns\""
-+        XTRAFLAGS="-d64 -Xdock:name=\"Install MATLAB\" -Xdock:icon=\"$RROOT/InstallForMacOSX.app/Contents/Resources/membrane.icns\""
+@@ -692,16 +692,16 @@
+         if [ $INSTALLBUNDLE -eq 1 ]; then        
+             XTRAFLAGS="-d64 -Xdock:name=\"Install\" -Xdock:icon=\"$BOOTSTRAP_PATH/installer.icns\""             
+         else 
+-            XTRAFLAGS="-d64 -Xdock:name=\"Install MATLAB\" -Xdock:icon=\"$ROOT/InstallForMacOSX.app/Contents/Resources/membrane.icns\""
++            XTRAFLAGS="-d64 -Xdock:name=\"Install MATLAB\" -Xdock:icon=\"$RROOT/InstallForMacOSX.app/Contents/Resources/membrane.icns\""
+         fi
      fi
      java_exe=$JRE_LOC/bin/java
 -    java_cmd="$java_exe -Xmx512m $XTRAFLAGS $SPLASH_OPTION -Djava.ext.dirs=$JAR_SEARCH_PATH $JAVA_LAUNCH_TARGET -root \"$ROOT\" -tmpdir \"$TEMP_DIR\" $arglist"

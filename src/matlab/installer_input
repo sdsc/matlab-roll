@@ -3,6 +3,6 @@ fileInstallationKey=FIK
 agreeToLicense=yes
 outputFile=/tmp/matlab.log
 mode=silent
-licensePath=ROLLPATH/license.dat
+licensePath=ROLLPATH/network.lic
 lmgrFiles=false
 lmgrService=false
