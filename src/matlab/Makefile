@@ -72,13 +72,11 @@ build: $(SRC_DIRS)
 	perl -pi -e "s!ROLLINSTALL!$(REDHAT.ROOT)/src/build-matlab!" $(SOURCE_DIR)/installer_input
 	perl -pi -e "s!FIK!$(FIK)!" $(SOURCE_DIR)/installer_input
 	perl -pi -e "s!ROLLPATH!$(CURDIR)/$(SOURCE_DIR)!" $(SOURCE_DIR)/installer_input
-	cp license.dat $(SOURCE_DIR)
 	( \
 		export -n DISPLAY=; \
 		cd $(SOURCE_DIR); \
 		./install -inputFile installer_input ; \
 		mkdir -p $(REDHAT.ROOT)/src/build-matlab/licenses; \
-		cp license.dat $(REDHAT.ROOT)/src/build-matlab/licenses/license.lic; \
          )
 	@echo "::: Package $(NAME) build complete :::"
 
