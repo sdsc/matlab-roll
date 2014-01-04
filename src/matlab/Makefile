@@ -71,7 +71,7 @@ build: $(SRC_DIRS)
 	mkdir -p $(REDHAT.ROOT)/src/build-matlab
 	perl -pi -e "s!ROLLINSTALL!$(REDHAT.ROOT)/src/build-matlab!" $(SOURCE_DIR)/installer_input
 	perl -pi -e "s!FIK!$(FIK)!" $(SOURCE_DIR)/installer_input
-	perl -pi -e "s!ROLLPATH!$(CURDIR)/$(SOURCE_DIR)!" $(SOURCE_DIR)/installer_input
+	perl -pi -e "s!ROLLPATH!$(CURDIR)/../../src/matlab-license-files!" $(SOURCE_DIR)/installer_input
 	( \
 		export -n DISPLAY=; \
 		cd $(SOURCE_DIR); \
