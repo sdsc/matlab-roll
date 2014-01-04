@@ -6,7 +6,7 @@ cat > ROOT_PKGROOTMODULEROOT/VERSION <<END
 module-whatis "matlab"
 module-whatis "Version: VERSION"
 prepend-path PATH /opt/matlab/VERSION//bin
-setenv MLM_LICENSE_FILE /opt/matlab/$(VERSION)/licenses/network.lic:/opt/matlab/$(VERSION)/licenses/license.dat 
+setenv MLM_LICENSE_FILE /opt/matlab/VERSION/licenses/network.lic:/opt/matlab/VERSION/licenses/license.dat 
 END
 
 chmod 0644  ROOT_PKGROOTMODULEROOT/VERSION
