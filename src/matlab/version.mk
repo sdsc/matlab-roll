@@ -1,6 +1,6 @@
 NAME               = matlab
-VERSION            = 2013b
-RELEASE            = 0
+VERSION            = 2014a
+RELEASE = 0
 RPM.EXTRAS         = "Autoprov: 0"
 RPM.EXTRAS         = AutoReq:No
 PKGROOT            = /opt/$(NAME)/$(VERSION)

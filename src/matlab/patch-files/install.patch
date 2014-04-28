@@ -1,5 +1,5 @@
---- matlab-2013b/install	2013-12-02 12:44:59.000000000 -0800
-+++ install	2013-12-02 14:43:58.000000000 -0800
+--- matlab-2014a/install	2014-03-27 16:25:40.000000000 -0700
++++ patch-files/install	2014-03-27 18:23:35.661448758 -0700
 @@ -476,7 +476,7 @@
      JAVA_DIR="$TEMP_DIR/java"
      JAR_LOC="$JAVA_DIR/jar"
@@ -27,8 +27,8 @@
      TESTONLY=0
      arglist=
      SHOW_SPLASH=1
-@@ -540,9 +540,9 @@
-     BOOTSTRAP_PATH=
+@@ -541,9 +541,9 @@
+     TEMP_DIR_SET=0
  
  #   Set default values for some variables if they are not set yet.
 -    if [ "$ROOT" = "" ]; then
@@ -39,7 +39,7 @@
      fi
  
      while [ "$stat" = "OK" -a  $# -gt 0 ]; do
-@@ -577,9 +577,9 @@
+@@ -578,9 +578,9 @@
                      stat=""
                  else
                      shift
@@ -52,7 +52,7 @@
                          stat=""
                      fi
                  fi
-@@ -667,11 +667,11 @@
+@@ -669,11 +669,11 @@
      doLinuxCheck
  
  #   Determine the java vm path for each platform.
@@ -66,7 +66,7 @@
      setVMenvironment "$TEMP_DIR/bin/$ARCH"
  
  #   Get the jar directories
-@@ -682,7 +682,7 @@
+@@ -684,7 +684,7 @@
  
  #   Set up splash option
      if [ $SHOW_SPLASH -eq 1 ]; then
@@ -75,7 +75,7 @@
      else
          SPLASH_OPTION=""
      fi
-@@ -692,16 +692,16 @@
+@@ -694,7 +694,7 @@
          if [ $INSTALLBUNDLE -eq 1 ]; then        
              XTRAFLAGS="-d64 -Xdock:name=\"Install\" -Xdock:icon=\"$BOOTSTRAP_PATH/installer.icns\""             
          else 
@@ -83,9 +83,13 @@
 +            XTRAFLAGS="-d64 -Xdock:name=\"Install MATLAB\" -Xdock:icon=\"$RROOT/InstallForMacOSX.app/Contents/Resources/membrane.icns\""
          fi
      fi
+ 
+@@ -704,12 +704,12 @@
+         TMPDIRFLAGS=""
+     fi
      java_exe=$JRE_LOC/bin/java
--    java_cmd="$java_exe -Xmx512m $XTRAFLAGS $SPLASH_OPTION -Djava.ext.dirs=$JAR_SEARCH_PATH $JAVA_LAUNCH_TARGET -root \"$ROOT\" -tmpdir \"$TEMP_DIR\" $arglist"
-+    java_cmd="$java_exe -Xmx512m $XTRAFLAGS $SPLASH_OPTION -Djava.ext.dirs=$JAR_SEARCH_PATH $JAVA_LAUNCH_TARGET -root \"$RROOT\" -tmpdir \"$TEMP_DIR\" $arglist"
+-    java_cmd="$java_exe -Xmx512m $XTRAFLAGS $TMPDIRFLAGS $SPLASH_OPTION -Djava.ext.dirs=$JAR_SEARCH_PATH $JAVA_LAUNCH_TARGET -root \"$ROOT\" -tmpdir \"$TEMP_DIR\" $arglist"
++    java_cmd="$java_exe -Xmx512m $XTRAFLAGS $TMPDIRFLAGS $SPLASH_OPTION -Djava.ext.dirs=$JAR_SEARCH_PATH $JAVA_LAUNCH_TARGET -root \"$RROOT\" -tmpdir \"$TEMP_DIR\" $arglist"
  
  #
      if [ "$VERBOSE" = "1" ]; then
