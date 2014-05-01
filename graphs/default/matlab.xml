@@ -15,10 +15,10 @@ All rights reserved. Rocks(r) v5.1 www.rocksclusters.org
 <changelog>
 </changelog>
 
-<edge from="base">
+<edge from="client">
   <to>matlab-common</to>
 </edge>
-<order head="base">
+<order head="client">
   <tail>matlab-common</tail>
 </order>
 
