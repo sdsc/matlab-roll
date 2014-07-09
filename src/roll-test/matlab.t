@@ -9,7 +9,7 @@ use Test::More qw(no_plan);
 my $appliance = $#ARGV >= 0 ? $ARGV[0] :
                 -d '/export/rocks/install' ? 'Frontend' : 'Compute';
 my $installedOnAppliancesPattern = '.';
-my $isInstalled = -d '/opt/matlab/2011b';
+my $isInstalled = -d '/opt/matlab/2014a';
 my $output;
 
 # matlab-common.xml
@@ -22,7 +22,7 @@ if($appliance =~ /$installedOnAppliancesPattern/) {
 SKIP: {
 
   skip 'matlab not installed', 4 if ! $isInstalled;
-  $output = `/opt/matlab/2011b/bin/matlab -nodisplay -r ver,exit 2>&1`;
+  $output = `/opt/matlab/2014a/bin/matlab -nodisplay -r ver,exit 2>&1`;
   like($output, qr/[Vv]ersion:\s*\d+\.\d+/, 'matlab exec works');
 
   skip 'modules not installed', 3 if ! -f '/etc/profile.d/modules.sh';
