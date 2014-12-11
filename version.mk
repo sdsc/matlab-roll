@@ -1,6 +1,6 @@
-ROLLNAME = matlab
-RELEASE  = 0
-COLOR    = orange
+ROLLNAME        = matlab
+VERSION        :=$(shell bash version.sh -v)
+RELEASE        :=$(shell bash version.sh -h)
+COLOR           = firebrick
 
-REDHAT.ROOT = $(PWD)
-RPM.EXTRAS = "Autoprov: 0"
+REDHAT.ROOT     = $(CURDIR)

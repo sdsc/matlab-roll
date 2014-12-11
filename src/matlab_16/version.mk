@@ -1,5 +1,5 @@
 NAME    = matlab_16
-VERSION = 2014a
-RELEASE = 0
+VERSION = 2014b
+RELEASE = 1
 RPM.EXTRAS = "Autoprov: 0"
 RPM.EXTRAS = AutoReq:No
