@@ -1,4 +1,4 @@
-NAME    = matlab_1
+NAME    = matlab_11
 PKGROOT = /opt/matlab/$(VERSION)
 VERSION = 2014b
 RELEASE = 1
