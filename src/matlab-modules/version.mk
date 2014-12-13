@@ -1,14 +1,9 @@
-ifndef ROLLCOMPILER
-  COMPILERNAME = gnu
-endif
-COMPILERNAME := $(firstword $(subst /, ,$(ROLLCOMPILER)))
-
 PACKAGE     = matlab
 CATEGORY    = applications
 
-NAME        = $(PACKAGE)-modules_$(COMPILERNAME)
+NAME        = $(PACKAGE)-modules
 RELEASE     = 8
-PKGROOT     = /opt/modulefiles/$(CATEGORY)/.$(COMPILERNAME)/$(PACKAGE)
+PKGROOT     = /opt/modulefiles/$(CATEGORY)/$(PACKAGE)
 
 VERSION_SRC = $(REDHAT.ROOT)/src/$(PACKAGE)/version.mk
 VERSION_INC = version.inc
