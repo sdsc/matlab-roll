@@ -16,3 +16,4 @@ include $(VERSION_INC)
 
 
 RPM.EXTRAS  = AutoReq:No
+RPM.EXTRAS     = %define _\_os\_install_post %{nil}
