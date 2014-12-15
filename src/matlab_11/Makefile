@@ -70,7 +70,7 @@ build:
 install::
 	mkdir -p $(ROOT)/$(PKGROOT)
 	( \
-             cd  $(REDHAT.ROOT)/src/build-matlab_1; \
+             cd  $(REDHAT.ROOT)/src/build-matlab_11; \
              cp -r * -d $(ROOT)/$(PKGROOT) \
         )
 
