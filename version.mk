@@ -1,6 +1,6 @@
 ROLLNAME        = matlab
 VERSION        :=$(shell bash version.sh -v)
 RELEASE        :=$(shell bash version.sh -h)
-COLOR           = firebrick
+COLOR           = orange
 
 REDHAT.ROOT     = $(CURDIR)
