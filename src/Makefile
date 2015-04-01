@@ -5,10 +5,9 @@
 # 
 # 				Rocks(r)
 # 		         www.rocksclusters.org
-# 		         version 5.6 (Emerald Boa)
-# 		         version 6.1 (Emerald Boa)
+# 		       version 6.1.1 (Sand Boa)
 # 
-# Copyright (c) 2000 - 2013 The Regents of the University of California.
+# Copyright (c) 2000 - 2014 The Regents of the University of California.
 # All rights reserved.	
 # 
 # Redistribution and use in source and binary forms, with or without
@@ -58,13 +57,13 @@
 # $Log$
 #
 
--include $(shell ${ROCKSROOT}/bin/arch).mk
--include $(shell ${ROCKSROOT}/bin/os).mk
+-include $(shell $(ROCKSROOT)/bin/arch).mk
+-include $(shell $(ROCKSROOT)/bin/os).mk
 
 default:
 	@echo "copyright|rpm|pkg|clean"
 
-copyright rpm pkg clean::
-	for i in $(SRCDIRS) ; do \
-		(cd $$i; $(MAKE) $@) ; \
+copyright pkg rpm clean::
+	for i in $(SRCDIRS); do \
+	  (cd $$i && $(MAKE) $@) || exit 2; \
 	done

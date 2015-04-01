@@ -5,10 +5,9 @@
 # 
 # 				Rocks(r)
 # 		         www.rocksclusters.org
-# 		         version 5.6 (Emerald Boa)
-# 		         version 6.1 (Emerald Boa)
+# 		       version 6.1.1 (Sand Boa)
 # 
-# Copyright (c) 2000 - 2013 The Regents of the University of California.
+# Copyright (c) 2000 - 2014 The Regents of the University of California.
 # All rights reserved.	
 # 
 # Redistribution and use in source and binary forms, with or without
@@ -63,11 +62,6 @@ include Rolls.mk
 
 default: roll
 
-clean::
-	rm -f _arch bootstrap.py
-
-cvsclean: clean
-	rm -fr RPMS SRPMS src/build-*
-
-distclean:: cvsclean clean
-	-rm -f build.log
+distclean:: clean
+	-rm -f _arch build.log
+	-rm -rf RPMS SRPMS src/build-*

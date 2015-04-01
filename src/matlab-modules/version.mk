@@ -1,5 +1,13 @@
-NAME    	= matlab-modules
-VERSION 	= 1.0
-RELEASE = 0
-RPM.EXTRAS = "Autoprov: 0"
-RPM.EXTRAS = AutoReq:No
+PACKAGE     = matlab
+CATEGORY    = applications
+
+NAME        = $(PACKAGE)-modules
+RELEASE     = 8
+PKGROOT     = /opt/modulefiles/$(CATEGORY)/$(PACKAGE)
+
+VERSION_SRC = $(REDHAT.ROOT)/src/$(PACKAGE)/version.mk
+VERSION_INC = version.inc
+include $(VERSION_INC)
+
+
+RPM.EXTRAS  = AutoReq:No
