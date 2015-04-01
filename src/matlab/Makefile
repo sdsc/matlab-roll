@@ -1,13 +1,13 @@
+#
 # $Id$
 #
 # @Copyright@
 # 
 # 				Rocks(r)
 # 		         www.rocksclusters.org
-# 		         version 5.6 (Emerald Boa)
-# 		         version 6.1 (Emerald Boa)
+# 		       version 6.1.1 (Sand Boa)
 # 
-# Copyright (c) 2000 - 2013 The Regents of the University of California.
+# Copyright (c) 2000 - 2014 The Regents of the University of California.
 # All rights reserved.	
 # 
 # Redistribution and use in source and binary forms, with or without
@@ -55,27 +55,37 @@
 # @Copyright@
 #
 # $Log$
-
-REDHAT.ROOT = $(shell readlink -f ${CURDIR}/../../)
-PACKAGES=16
+#
+#
+REDHAT.ROOT = $(CURDIR)/../../
 
 -include $(ROCKSROOT)/etc/Rules.mk
 include Rules.mk
-include pull.mk
+include $(SDSCDEVEL)/Pull.mk
+include $(SDSCDEVEL)/Rules.mk
+
+
+$(NAME).spec: DESCRIPTION
+
+DESCRIPTION:
+	( \
+	  $(DESCRIBE_PKG) \
+	) > $@
+
+PACKAGES=16
 
 FIK := $(shell cat fik.txt)
 
 build: $(SRC_DIRS)
-	cp installer_input $(SOURCE_DIR)
-	patch -b $(SOURCE_DIR)/install patch-files/install.patch
+	cp installer_input $(SOURCE_DIR)/bin
 	mkdir -p $(REDHAT.ROOT)/src/build-matlab
-	perl -pi -e "s!ROLLINSTALL!$(REDHAT.ROOT)/src/build-matlab!" $(SOURCE_DIR)/installer_input
-	perl -pi -e "s!FIK!$(FIK)!" $(SOURCE_DIR)/installer_input
-	perl -pi -e "s!ROLLPATH!$(CURDIR)/../../src/matlab-license-files!" $(SOURCE_DIR)/installer_input
+	perl -pi -e "s!ROLLINSTALL!$(REDHAT.ROOT)/src/build-matlab!" $(SOURCE_DIR)/bin/installer_input
+	perl -pi -e "s!FIK!$(FIK)!" $(SOURCE_DIR)/bin/installer_input
+	perl -pi -e "s!ROLLPATH!$(CURDIR)/../../src/matlab-license-files!" $(SOURCE_DIR)/bin/installer_input
 	( \
 		export -n DISPLAY=; \
 		cd $(SOURCE_DIR); \
-		./install -inputFile installer_input ; \
+		./install   -inputFile installer_input ; \
 		mkdir -p $(REDHAT.ROOT)/src/build-matlab/licenses; \
          )
 	@echo "::: Package $(NAME) build complete :::"
@@ -124,10 +134,8 @@ install::
            rm -f $(REDHAT.ROOT)/src/.files; \
            rm -f $(REDHAT.ROOT)/src/package.tar \
         )
-	cat matlab.module | perl -pi -e "s!MODULEROOT!/opt/modulefiles/applications/matlab!g;s!VERSION!$(VERSION)!g" \
-          > $(REDHAT.ROOT)/src/build-matlab-modules/$(NAME).module
 	@echo "::: Package $(NAME) install complete :::"
 
 
 clean::
-	rm -rf $(SOURCE_DIR)
+	rm -rf $(SOURCE_DIR) DESCRIPTION
