@@ -8,7 +8,7 @@ DESC=`eval ${DESC_CMD}`
 if [ ! -d "./.git" ] && [ -z "${DESC}" ]
 then
     # Try to support using the tagged downloads
-    DESC=`pwd | grep -oe 'fsl-roll-.\+' | sed 's/fsl-roll-//g'`
+    DESC=`pwd | grep -oe 'matlab-roll-.\+' | sed 's/matlab-roll-//g'`
     LOCAL_REV="-github_archive"
 fi
 
