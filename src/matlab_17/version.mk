@@ -1,4 +1,4 @@
-NAME    = matlab_17
+NAME    = sdsc-matlab_17
 PKGROOT = /opt/matlab/$(VERSION)
 VERSION = 2015a
 RELEASE = 0

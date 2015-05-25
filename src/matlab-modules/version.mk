@@ -1,7 +1,7 @@
 PACKAGE     = matlab
 CATEGORY    = applications
 
-NAME        = $(PACKAGE)-modules
+NAME        = sdsc-$(PACKAGE)-modules
 RELEASE     = 0
 PKGROOT     = /opt/modulefiles/$(CATEGORY)/$(PACKAGE)
 
