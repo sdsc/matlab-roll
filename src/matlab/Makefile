@@ -86,8 +86,8 @@ build: $(SRC_DIRS)
 		export -n DISPLAY=; \
 		cd $(SOURCE_DIR); \
 		./install   -inputFile installer_input ; \
-		mkdir -p $(REDHAT.ROOT)/src/build-matlab/licenses; \
          )
+	rm -rf $(REDHAT.ROOT)/src/build-matlab/licenses
 	@echo "::: Package $(NAME) build complete :::"
 
 install::
