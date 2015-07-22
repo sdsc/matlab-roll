@@ -1,0 +1,26 @@
+#!/bin/bash
+if [ ! -e $HOME/.vnc/passwd ]; then
+   /home/jpg/opt/comet/bin/vncpasswd
+fi
+echo -n 'enter maximum time of matlab session (hh:mm:ss) '
+read time junk
+sbatch --nodes=1 --tasks-per-node=1 -p shared -t $time  -L matlab:1 >$HOME/jobid <<EOF
+#!/bin/bash
+line=\`/home/jpg/opt/comet/bin/vncserver -geometry 1920x1100 -depth 16 -IdleTimeout 0  2>&1 |grep New\`
+server=\`echo \$line |awk '{print \$6}'\`
+echo \$server > $HOME/vnc_info
+hours=\`echo $time |awk -F: '{print \$1}'\`
+minutes=\`echo $time |awk -F: '{print \$2}'\`
+seconds=\`echo $time |awk -F: '{print \$3}'\`
+sleep \$(( \$hours * 3600 + \$minutes*60 + \$seconds  ))
+EOF
+cat $HOME/jobid|awk '{print $4}' > $HOME/vnc_jobid
+echo "VNC  SLURM JOB ID: `cat $HOME/vnc_jobid`"
+echo -n "WAITING FOR JOB TO START "
+while [  !  -e $HOME/vnc_info ] ; do
+sleep 1
+ls -l $HOME/vnc_info >& /dev/null
+echo -n .
+done
+echo
+echo "VNC  URL: `cat $HOME/vnc_info`"
