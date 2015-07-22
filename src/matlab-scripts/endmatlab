@@ -1,7 +1,4 @@
 #!/bin/bash
-#display=`cat vnc_info|awk -F: '{print $2}'`
-#echo $display
-#srun --jobid=`cat vnc_jobid` "/home/jpg/opt/comet/bin/vncserver -kill :$display"
 if [ -e $HOME/vnc_jobid ]; then
    scancel `cat $HOME/vnc_jobid`
    rm -f $HOME/vnc_jobid

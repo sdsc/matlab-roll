@@ -1,12 +1,12 @@
 #!/bin/bash
 if [ ! -e $HOME/.vnc/passwd ]; then
-   /home/jpg/opt/comet/bin/vncpasswd
+   vncpasswd
 fi
 echo -n 'enter maximum time of matlab session (hh:mm:ss) '
 read time junk
 sbatch --gres=gpu:1 --nodes=1 --tasks-per-node=1 -p gpu-shared -t $time  -L matlab:1 >$HOME/jobid <<EOF
 #!/bin/bash
-line=\`/home/jpg/opt/comet/bin/vncserver -geometry 1920x1100 -depth 16 -IdleTimeout 0 2>&1 |grep New\`
+line=\`vncserver -geometry 1920x1100 -depth 16 -IdleTimeout 0 2>&1 |grep New\`
 echo \$line
 server=\`echo \$line |awk '{print \$6}'\`
 echo \$server > $HOME/vnc_info
