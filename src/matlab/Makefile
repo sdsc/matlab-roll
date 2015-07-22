@@ -133,6 +133,7 @@ install::
            rm -f $(REDHAT.ROOT)/src/$$$$.tmp; \
            rm -f $(REDHAT.ROOT)/src/.files; \
            rm -f $(REDHAT.ROOT)/src/package.tar \
+           rm -f $(ROOT)/$(PKGROOT)/licenses/*; \
         )
 	@echo "::: Package $(NAME) install complete :::"
 
