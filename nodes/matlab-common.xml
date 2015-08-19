@@ -34,7 +34,7 @@ All rights reserved. Rocks(r) v5.1 www.rocksclusters.org
 <package>sdsc-matlab_17</package>
 <package>sdsc-matlab</package>
 <package>sdsc-matlab-modules</package>
-<package>sdsc-matlab-license-files</package>
 <package>sdsc-matlab-roll-test</package>
+<package>sdsc-matlab-scripts</package>
 
 </kickstart>

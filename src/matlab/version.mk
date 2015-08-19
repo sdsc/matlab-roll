@@ -1,6 +1,6 @@
 NAME               = sdsc-matlab
 VERSION            = 2015a
-RELEASE = 0
+RELEASE            = 1
 RPM.EXTRAS         = "Autoprov: 0"
 RPM.EXTRAS         = AutoReq:No
 PKGROOT            = /opt/$(NAME)/$(VERSION)

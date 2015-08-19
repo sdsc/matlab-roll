@@ -1,5 +1,4 @@
 #%Module1.0
 module-whatis "matlab"
 module-whatis "Version: VERSION"
-prepend-path PATH /opt/matlab/VERSION//bin
-setenv MLM_LICENSE_FILE /opt/matlab/VERSION/licenses/network.lic:/opt/matlab/VERSION/licenses/license.dat 
+prepend-path PATH /opt/matlab/VERSION/bin
