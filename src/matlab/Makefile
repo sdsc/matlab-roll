@@ -72,7 +72,7 @@ DESCRIPTION:
 	  $(DESCRIBE_PKG) \
 	) > $@
 
-PACKAGES=16
+PACKAGES=17
 
 FIK := $(shell cat fik.txt)
 
