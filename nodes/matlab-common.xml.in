@@ -1,0 +1,23 @@
+<?xml version="1.0" standalone="no"?>
+
+<kickstart>
+
+<description>
+MATLAB
+http://www.mathworks.com
+</description>
+
+<copyright>
+Copyright (c) 2000 - 2011 The Regents of the University of California.
+All rights reserved. Rocks(r) v5.1 www.rocksclusters.org
+</copyright>
+
+<changelog>
+</changelog>
+
+<package>sdsc-matlab</package>
+<package>sdsc-matlab-modules</package>
+<package>sdsc-matlab-roll-test</package>
+<package>sdsc-matlab-scripts</package>
+
+</kickstart>

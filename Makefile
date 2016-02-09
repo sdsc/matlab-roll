@@ -61,7 +61,8 @@
 include Rolls.mk
 
 default: roll
+	cp nodes/matlab-common.xml.in nodes/matlab-common.xml
 
 distclean:: clean
 	-rm -f _arch build.log
-	-rm -rf RPMS SRPMS src/build-*
+	-rm -rf RPMS SRPMS src/*.tmp nodes/matlab-common.xml manifest
