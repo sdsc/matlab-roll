@@ -62,6 +62,7 @@ include Rolls.mk
 
 default: 
 	cp nodes/matlab-common.xml.in nodes/matlab-common.xml
+	$(MAKE) roll
 
 distclean:: clean
 	-rm -f _arch build.log
