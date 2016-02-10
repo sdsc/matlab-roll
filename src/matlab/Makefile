@@ -60,6 +60,7 @@
 REDHAT.ROOT = $(CURDIR)/../../
 NODE_FILE = $(REDHAT.ROOT)/nodes/matlab-common.xml
 MANIFEST_DIR = $(REDHAT.ROOT)
+TEMP_DIRS = $(REDHAT.ROOT)/src/matlab
 
 -include $(ROCKSROOT)/etc/Rules.mk
 include Rules.mk
@@ -68,6 +69,8 @@ include $(SDSCDEVEL)/Rules.mk
 
 
 $(NAME).spec: DESCRIPTION
+
+BUILDIT = 1
 
 DESCRIPTION:
 	( \
@@ -78,35 +81,39 @@ PACKAGES=18
 
 FIK := $(shell cat fik.txt)
 
-.INTERMEDIATE: $(SRC_DIRS)
 
+
+ifneq ("$(BUILDIT)", "$(subst 1,,$(BUILDIT))")
 build: build-matlab
 	@echo "::: Package $(NAME) build complete :::"
+else
+build: 
+endif
 
-build-matlab: $(SRC_DIRS)
+build-matlab:  $(SRC_DIRS)
 	  cp installer_input $(SOURCE_DIR)
-	  mkdir -p $(CURDIR)/build-matlab
-	  perl -pi -e "s!ROLLINSTALL!$(CURDIR)/build-matlab!" $(SOURCE_DIR)/installer_input
+	  mkdir -p $(TEMP_DIRS)/build-matlab
+	  perl -pi -e "s!ROLLINSTALL!$(TEMP_DIRS)/build-matlab!" $(SOURCE_DIR)/installer_input
 	  perl -pi -e "s!FIK!$(FIK)!" $(SOURCE_DIR)/installer_input
-	  perl -pi -e "s!ROLLPATH!$(CURDIR)/../../src/matlab-license-files!" $(SOURCE_DIR)/installer_input
+	  perl -pi -e "s!ROLLPATH!$(REDHAT.ROOT)/src/matlab-license-files!" $(SOURCE_DIR)/installer_input
 	  cp $(MANIFEST_DIR)/manifest.in $(MANIFEST_DIR)/manifest
 	  ( \
 	     export -n DISPLAY=; \
 	     cd $(SOURCE_DIR); \
 	     ./install   -inputFile installer_input ; \
-             rm -rf $(CURDIR)/build-matlab/licenses; \
+             rm -rf $(TEMP_DIRS)/build-matlab/licenses; \
              packageCount=1; \
-             mkdir  -p $(CURDIR)/build-matlab_$${packageCount}; \
+             mkdir  -p $(TEMP_DIRS)/build-matlab_$${packageCount}; \
              echo build-matlab_$${packageCount} >> $(MANIFEST_DIR)/manifest; \
-             cd  $(CURDIR)/build-matlab; \
-             find . ! -type d -exec ls -l {} \; >$(CURDIR)/$$$$.tmp; \
-             find . \( -name .\* -a ! -type d \) -exec ls -l {} \; >>$(CURDIR)/$$$$.tmp; \
+             cd  $(TEMP_DIRS)/build-matlab; \
+             find . ! -type d -exec ls -l {} \; >$(TEMP_DIRS)/$$$$.tmp; \
+             find . \( -name .\* -a ! -type d \) -exec ls -l {} \; >>$(TEMP_DIRS)/$$$$.tmp; \
              sum=0; \
              total=`du -b -s|awk '{print $$1}'`; \
              maxPackageSize=$$(( $$total / ( $(PACKAGES) -1 ) )); \
              echo "MAX SIZE=$$maxPackageSize"; \
-             exec <$(CURDIR)/$$$$.tmp; \
-             cat /dev/null > $(CURDIR)/.files; \
+             exec <$(TEMP_DIRS)/$$$$.tmp; \
+             cat /dev/null > $(TEMP_DIRS)/.files; \
              while read line; do \
                  fileSize=`echo $$line |awk '{print $$5}'`; \
                  fileName=`echo $$line |awk '{print $$9}'`; \
@@ -114,46 +121,52 @@ build-matlab: $(SRC_DIRS)
                  if test $$sum -ge $$maxPackageSize; then \
                     sum=$$(( $$sum - $$fileSize )); \
                     echo "NEW PACKAGE: OLD SUM $$sum"; \
-                    tar cvf $(CURDIR)/package.tar `cat $(CURDIR)/.files`; \
-                    cd $(CURDIR)/build-matlab_$$packageCount; \
-                    tar xvf $(CURDIR)/package.tar; \
-                    cd $(CURDIR)/build-matlab; \
+                    tar cvf $(TEMP_DIRS)/package.tar `cat $(TEMP_DIRS)/.files`; \
+                    cd $(TEMP_DIRS)/build-matlab_$$packageCount; \
+                    tar xvf $(TEMP_DIRS)/package.tar; \
+                    cd $(TEMP_DIRS)/build-matlab; \
                     sum=$$fileSize; \
                     packageCount=$$(( $$packageCount + 1 )); \
-                    mkdir  -p $(CURDIR)/build-matlab_$$packageCount; \
-                    cat /dev/null > $(CURDIR)/.files; \
+                    mkdir  -p $(TEMP_DIRS)/build-matlab_$$packageCount; \
+                    cat /dev/null > $(TEMP_DIRS)/.files; \
                  fi; \
-                 echo $$fileName >> $(CURDIR)/.files; \
+                 echo $$fileName >> $(TEMP_DIRS)/.files; \
              done; \
-             tar cvf $(CURDIR)/package.tar `cat $(CURDIR)/.files`; \
-             cd $(CURDIR)/build-matlab_$$packageCount; \
-             tar xvf $(CURDIR)/package.tar; \
-             cd $(CURDIR)/build-matlab; \
-             mkdir -p $(CURDIR)/build-matlab_$$packageCount/appdata/products; \
-             mkdir -p $(CURDIR)/build-matlab_$$packageCount/appdata/components; \
-             cp -r -d appdata/products/* $(CURDIR)/build-matlab_$$packageCount/appdata/products; \
-             cp -r -d appdata/components/* $(CURDIR)/build-matlab_$$packageCount/appdata/components; \
-             rm -f $(CURDIR)/$$$$.tmp; \
-             rm -f $(CURDIR)/.files; \
-             rm -f $(CURDIR)/package.tar \
+             tar cvf $(TEMP_DIRS)/package.tar `cat $(TEMP_DIRS)/.files`; \
+             cd $(TEMP_DIRS)/build-matlab_$$packageCount; \
+             tar xvf $(TEMP_DIRS)/package.tar; \
+             cd $(TEMP_DIRS)/build-matlab; \
+             mkdir -p $(TEMP_DIRS)/build-matlab_$$packageCount/appdata/products; \
+             mkdir -p $(TEMP_DIRS)/build-matlab_$$packageCount/appdata/components; \
+             cp -r -d appdata/products/* $(TEMP_DIRS)/build-matlab_$$packageCount/appdata/products; \
+             cp -r -d appdata/components/* $(TEMP_DIRS)/build-matlab_$$packageCount/appdata/components; \
+             rm -f $(TEMP_DIRS)/$$$$.tmp; \
+             rm -f $(TEMP_DIRS)/.files; \
+             rm -f $(TEMP_DIRS)/package.tar \
              rm -f $(ROOT)/$(PKGROOT)/licenses/* \
           )
 
 install::
 	mkdir  -p -m 755 $(ROOT)/$(PKGROOT)
 	( \
-          if test -z "$(BUILDIT)"; then \
-            for PACKAGE in $(PACKAGES); do \
-                   make NAME=sdsc-matlab_$(PACKAGE) VERSION=$(VERSION) BUILDIT=1 packagedir=build-matlab_$(PACKAGE) rpm; \
+          if test -f $(SOURCE_PKG); then \
+             mv $(SOURCE_PKG) .. ; \
+          fi; \
+          if test $(BUILDIT) -eq 1; then \
+            for PACKAGE in `seq 1 $(PACKAGES)`; do \
+                   make NAME=sdsc-matlab_$${PACKAGE} VERSION=$(VERSION) BUILDIT=0 matlabdir=build-matlab_$${PACKAGE} rpm; \
                    perl -pi -e 'print $$_ and s/$(NAME)/build-matlab_$(PACKAGE)/ if m/$(NAME)/' $(NODE_FILE); \
             done; \
           else \
-             cd  $(CURDIR)/build-matlab_$(packagedir); \
+             cd  $(TEMP_DIRS)/$(matlabdir); \
              cp -r * -d $(ROOT)/$(PKGROOT); \
-          fi  \
+          fi;  \
+          if test -f ../$(SOURCE_PKG); then \
+             mv ../$(SOURCE_PKG) . ; \
+          fi \
         ) 
 	@echo "::: Package $(NAME) install complete :::"
 
 
 clean::
-	rm -rf $(SOURCE_DIR) *.tmp build-* DESCRIPTION
+	rm -rf $(SOURCE_DIR) *.tmp DESCRIPTION build-*

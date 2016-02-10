@@ -60,7 +60,7 @@
 -include $(ROLLSROOT)/etc/Rolls.mk
 include Rolls.mk
 
-default: roll
+default: 
 	cp nodes/matlab-common.xml.in nodes/matlab-common.xml
 
 distclean:: clean
