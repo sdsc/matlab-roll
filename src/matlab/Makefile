@@ -154,7 +154,7 @@ install::
           fi; \
           if test $(BUILDIT) -eq 1; then \
             for PACKAGE in `seq 1 $(PACKAGES)`; do \
-                   make NAME=sdsc-matlab_$${PACKAGE} VERSION=$(VERSION) BUILDIT=0 matlabdir=build-matlab_$${PACKAGE} rpm; \
+                   make NAME=sdsc-matlab_$${PACKAGE} PKGROOT=$(PKGROOT) VERSION=$(VERSION) BUILDIT=0 matlabdir=build-matlab_$${PACKAGE} rpm; \
                    perl -pi -e 'print $$_ and s/$(NAME)/build-matlab_$(PACKAGE)/ if m/$(NAME)/' $(NODE_FILE); \
             done; \
           else \
