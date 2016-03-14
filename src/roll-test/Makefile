@@ -5,6 +5,9 @@ include Rules.mk
 
 build:
 
+$(VERSION_INC): $(VERSION_SRC)
+	/bin/grep 'VERSION.*=' $(VERSION_SRC) > $@
+
 install::
 	mkdir -p -m 755 $(ROOT)/$(PKGROOT)
 	cp *.t $(ROOT)/$(PKGROOT)/
