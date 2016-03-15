@@ -150,6 +150,9 @@ install::
 	mkdir  -p -m 755 $(ROOT)/$(PKGROOT)
 	cp $(NODE_FILE).in $(NODE_FILE)
 	( \
+          if test -f $(SOURCE_PKG); then \
+              mv $(SOURCE_PKG) .. ; \
+          fi; \
           if test $(BUILDIT) -eq 1; then \
             for PACKAGE in `seq 1 $(PACKAGES)`; do \
                    perl -pi -e "print and s/$(NAME)_PACKAGE/$(NAME)_$${PACKAGE}/ if m/$(NAME)_PACKAGE/" $(NODE_FILE); \
@@ -160,6 +163,9 @@ install::
              cd  $(TEMP_DIRS)/$(matlabdir); \
              cp -r * -d $(ROOT)/$(PKGROOT); \
           fi;  \
+          if test -f ../$(SOURCE_PKG); then \
+             mv ../$(SOURCE_PKG) . ; \
+          fi \
         ) 
 	@echo "::: Package $(NAME) install complete :::"
 

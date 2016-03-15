@@ -20,3 +20,4 @@ install::
 	  $(ROOT)/$(PKGROOT)/*.t
 
 clean::
+	rm -f $(VERSION_INC)
