@@ -84,13 +84,13 @@ FIK := $(shell cat fik.txt)
 
 
 ifneq ("$(BUILDIT)", "$(subst 1,,$(BUILDIT))")
-build: build-matlab
+build: $(SRC_DIRS) build-matlab
 	@echo "::: Package $(NAME) build complete :::"
 else
 build: 
 endif
 
-build-matlab:  $(SRC_DIRS)
+build-matlab:
 	  cp installer_input $(SOURCE_DIR)
 	  mkdir -p $(TEMP_DIRS)/build-matlab
 	  perl -pi -e "s!ROLLINSTALL!$(TEMP_DIRS)/build-matlab!" $(SOURCE_DIR)/installer_input
@@ -148,15 +148,17 @@ build-matlab:  $(SRC_DIRS)
 
 install::
 	mkdir  -p -m 755 $(ROOT)/$(PKGROOT)
+	cp $(NODE_FILE).in $(NODE_FILE)
 	( \
           if test -f $(SOURCE_PKG); then \
              mv $(SOURCE_PKG) .. ; \
           fi; \
           if test $(BUILDIT) -eq 1; then \
             for PACKAGE in `seq 1 $(PACKAGES)`; do \
-                   perl -pi -e 'print and s/$(NAME)/sdsc-matlab_$${PACKAGE}/ if m/$(NAME)/' $(NODE_FILE); \
+                   perl -pi -e "print and s/$(NAME)_PACKAGE/$(NAME)_$${PACKAGE}/ if m/$(NAME)_PACKAGE/" $(NODE_FILE); \
                    make NAME=sdsc-matlab_$${PACKAGE} BUILDIT=0 matlabdir=build-matlab_$${PACKAGE} rpm; \
             done; \
+            perl -pi -e '$$_ = "" if m/sdsc-matlab_PACKAGE/' $(NODE_FILE); \
           else \
              cd  $(TEMP_DIRS)/$(matlabdir); \
              cp -r * -d $(ROOT)/$(PKGROOT); \
