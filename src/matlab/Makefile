@@ -141,7 +141,6 @@ build-matlab:
              rm -f $(TEMP_DIRS)/package.tar \
              rm -f $(ROOT)/$(PKGROOT)/licenses/* \
           )
-	touch build-matlab
 
 install:: 
 	mkdir  -p -m 755 $(ROOT)/$(PKGROOT)
