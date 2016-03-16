@@ -146,21 +146,14 @@ build-matlab:
              rm -f $(ROOT)/$(PKGROOT)/licenses/* \
           )
 
-install::
+install:: 
 	mkdir  -p -m 755 $(ROOT)/$(PKGROOT)
 	( \
           if test -f $(SOURCE_PKG); then \
               mv $(SOURCE_PKG) .. ; \
           fi; \
           if test $(BUILDIT) -eq 1; then \
-            for PACKAGE in `seq 1 $(PACKAGES)`; do \
-                   perl -pi -e "print and s/$(NAME)_PACKAGE/$(NAME)_$${PACKAGE}/ if m/$(NAME)_PACKAGE/" $(NODE_FILE); \
-                   make NAME=sdsc-matlab_$${PACKAGE} BUILDIT=0 matlabdir=build-matlab_$${PACKAGE} rpm; \
-            done; \
-            perl -pi -e '$$_ = "" if m/sdsc-matlab_PACKAGE/' $(NODE_FILE); \
-          else \
-             cd  $(TEMP_DIRS)/$(matlabdir); \
-             cp -r * -d $(ROOT)/$(PKGROOT); \
+            make matlabrpms; \
           fi;  \
           if test -f ../$(SOURCE_PKG); then \
              mv ../$(SOURCE_PKG) . ; \
@@ -168,6 +161,20 @@ install::
         ) 
 	@echo "::: Package $(NAME) install complete :::"
 
+matlabrpms: $(foreach PACKAGE,$(shell seq 1 $(PACKAGES)),$(NAME)_$(PACKAGE))
+
+define MATLABRPM
+$(NAME)_$(1):
+	make NAME=$(NAME)_$(1) BUILDIT=0 matlabdir=build-matlab_$(1)) rpm
+	perl -pi -e "print and s/$(NAME)_PACKAGE/$(NAME)_$(1)/ if m/$(NAME)_PACKAGE/" $(NODE_FILE); \
+	( \
+	cd  $(TEMP_DIRS)/$(matlabdir); \
+        cp -r * -d $(ROOT)/$(PKGROOT) \
+        )
+endef
+
+$(foreach PACKAGE,$(shell seq 1 $(PACKAGES)),$(eval $(call MATLABRPM,$(PACKAGE))))
 
 clean::
 	rm -rf $(SOURCE_DIR) *.tmp DESCRIPTION build-*
+
