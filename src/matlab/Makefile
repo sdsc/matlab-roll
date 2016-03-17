@@ -60,7 +60,7 @@
 REDHAT.ROOT = $(CURDIR)/../../
 NODE_FILE = $(REDHAT.ROOT)/nodes/matlab-common.xml
 MANIFEST_DIR = $(REDHAT.ROOT)
-TEMP_DIRS = $(REDHAT.ROOT)/src/matlab
+TEMP_DIRS = $(REDHAT.ROOT)/src
 
 -include $(ROCKSROOT)/etc/Rules.mk
 include Rules.mk
@@ -77,16 +77,11 @@ DESCRIPTION:
 	  $(DESCRIBE_PKG) \
 	) > $@
 
-PACKAGES=18
-
 FIK := $(shell cat fik.txt)
 
 
 
-build: $(SRC_DIRS) build-matlab
-	@echo "::: Package $(NAME) build complete :::"
-
-build-matlab:
+build: $(SRC_DIRS)
 	  cp installer_input $(SOURCE_DIR)
 	  mkdir -p $(TEMP_DIRS)/build-matlab
 	  perl -pi -e "s!ROLLINSTALL!$(TEMP_DIRS)/build-matlab!" $(SOURCE_DIR)/installer_input
@@ -141,26 +136,15 @@ build-matlab:
              rm -f $(TEMP_DIRS)/package.tar \
              rm -f $(ROOT)/$(PKGROOT)/licenses/* \
           )
+	  @echo "::: Package $(NAME) build complete :::"
 
 install:: 
 	mkdir  -p -m 755 $(ROOT)/$(PKGROOT)
 	( \
-          if test -f $(SOURCE_PKG); then \
-              mv $(SOURCE_PKG) .. ; \
-          fi; \
           for PACKAGE in `seq 1 $(PACKAGES)`; do \
-            if test $(BUILDIT) -eq 1; then \
-               make NAME=$(NAME)_$(PACKAGE) BUILDIT=0 rpm; \
-            else \
-	       perl -pi -e "print and s/$(NAME)_PACKAGE/$(NAME)_$(1)/ if m/$(NAME)_PACKAGE/" $(NODE_FILE); \
-            fi;  \
+	       perl -pi -e "print and s/$(NAME)_PACKAGE/$(NAME)_$(PACKAGE)/ if m/$(NAME)_PACKAGE/" $(NODE_FILE); \
           done; \
-          if test -f ../$(SOURCE_PKG); then \
-              mv ../$(SOURCE_PKG) . ; \
-          fi; \
-          if test $(BUILDIT) -eq 1; then \
-              perl -pi -e 'print $$_ and s/$(NAME)/build-matlab_$(PACKAGE)/ if m/$(NAME)/' $(NODE_FILE); \
-          fi \
+          perl -pi -e 'print $$_ and s/$(NAME)/build-matlab_$(PACKAGE)/ if m/$(NAME)/' $(NODE_FILE); \
         ) 
 	@echo "::: Package $(NAME) install complete :::"
 

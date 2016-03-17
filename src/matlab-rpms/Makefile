@@ -56,15 +56,34 @@
 #
 # $Log$
 #
+#
+REDHAT.ROOT = $(CURDIR)/../../
+NODE_FILE = $(REDHAT.ROOT)/nodes/matlab-common.xml
+MANIFEST_DIR = $(REDHAT.ROOT)
+TEMP_DIRS = $(REDHAT.ROOT)/src/matlab
 
--include $(ROLLSROOT)/etc/Rolls.mk
-include Rolls.mk
-PACKAGES=18
+-include $(ROCKSROOT)/etc/Rules.mk
+include Rules.mk
+include $(SDSCDEVEL)/Pull.mk
+include $(SDSCDEVEL)/Rules.mk
 
-default: 
-	cp nodes/matlab-common.xml.in nodes/matlab-common.xml
-	$(MAKE) PACKAGES=$(PACKAGES) roll
 
-distclean:: clean
-	-rm -f _arch build.log
-	-rm -rf RPMS SRPMS src/build-* src/*.tmp nodes/matlab-common.xml manifest
+TEMP_DIRS = $(REDHAT.ROOT)/src
+BUILDIT = 1
+
+build:
+
+install:: 
+	mkdir  -p -m 755 $(ROOT)/$(PKGROOT)
+	( \
+           if test $BUILDIT -eq 1; then \
+             for PACKAGE in `seq 1 $(PACKAGES)`; do \
+               make NAME=$(NAME)_$(PACKAGE) BUILDDIR=build-$(NAME)_$(PACKAGE) BUILDIT=0 rpm; \
+             done; \
+           else \
+             cp -r $(TEMP_DIRS)/$(BUILDDIR)/* -d $(ROOT)/$(PKGROOT); \
+           fi  \
+        )
+	@echo "::: Package $(NAME) install complete :::"
+
+clean::
