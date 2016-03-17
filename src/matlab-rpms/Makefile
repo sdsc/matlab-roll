@@ -78,7 +78,7 @@ install::
 	( \
            if test $(BUILDIT) -eq 1; then \
              for PACKAGE in `seq 1 $(PACKAGES)`; do \
-               make NAME=$(NAME)_$(PACKAGE) BUILDDIR=build-$(NAME)_$(PACKAGE) BUILDIT=0 rpm; \
+               make NAME=$(NAME)_$${PACKAGE} BUILDDIR=build-$(NAME)_$${PACKAGE} BUILDIT=0 rpm; \
              done; \
            else \
              cp -r $(TEMP_DIRS)/$(BUILDDIR)/* -d $(ROOT)/$(PKGROOT); \
