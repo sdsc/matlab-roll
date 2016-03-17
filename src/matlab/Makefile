@@ -142,9 +142,9 @@ install::
 	mkdir  -p -m 755 $(ROOT)/$(PKGROOT)
 	( \
           for PACKAGE in `seq 1 $(PACKAGES)`; do \
-	       perl -pi -e "print and s/$(NAME)_PACKAGE/$(NAME)_$(PACKAGE)/ if m/$(NAME)_PACKAGE/" $(NODE_FILE); \
+	       perl -pi -e "print and s/$(NAME)_PACKAGE/$(NAME)_$${PACKAGE}/ if m/$(NAME)_PACKAGE/" $(NODE_FILE); \
           done; \
-          perl -pi -e 'print $$_ and s/$(NAME)/build-matlab_$(PACKAGE)/ if m/$(NAME)/' $(NODE_FILE); \
+	  perl -pi -e '$$_ = "" if m/$(NAME)_PACKAGE/' $(NODE_FILE); \
         ) 
 	@echo "::: Package $(NAME) install complete :::"
 
