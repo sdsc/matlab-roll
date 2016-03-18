@@ -82,63 +82,63 @@ FIK := $(shell cat fik.txt)
 
 
 build: $(SRC_DIRS)
-	  cp installer_input $(SOURCE_DIR)
-	  mkdir -p $(TEMP_DIRS)/build-matlab
-	  perl -pi -e "s!ROLLINSTALL!$(TEMP_DIRS)/build-matlab!" $(SOURCE_DIR)/installer_input
-	  perl -pi -e "s!FIK!$(FIK)!" $(SOURCE_DIR)/installer_input
-	  perl -pi -e "s!ROLLPATH!$(REDHAT.ROOT)/src/matlab-license-files!" $(SOURCE_DIR)/installer_input
-	  cp $(MANIFEST_DIR)/manifest.in $(MANIFEST_DIR)/manifest
-	  ( \
-	     export -n DISPLAY=; \
-	     cd $(SOURCE_DIR); \
-	     ./install   -inputFile installer_input ; \
-             rm -rf $(TEMP_DIRS)/build-matlab/licenses; \
-             packageCount=1; \
-             mkdir  -p $(TEMP_DIRS)/build-matlab_$${packageCount}; \
-             echo build-matlab_$${packageCount} >> $(MANIFEST_DIR)/manifest; \
-             cd  $(TEMP_DIRS)/build-matlab; \
-             find . ! -type d -exec ls -l {} \; >$(TEMP_DIRS)/$$$$.tmp; \
-             find . \( -name .\* -a ! -type d \) -exec ls -l {} \; >>$(TEMP_DIRS)/$$$$.tmp; \
-             sum=0; \
-             total=`du -b -s|awk '{print $$1}'`; \
-             maxPackageSize=$$(( $$total / ( $(PACKAGES) -1 ) )); \
-             echo "MAX SIZE=$$maxPackageSize"; \
-             exec <$(TEMP_DIRS)/$$$$.tmp; \
-             cat /dev/null > $(TEMP_DIRS)/.files; \
-             while read line; do \
-                 fileSize=`echo $$line |awk '{print $$5}'`; \
-                 fileName=`echo $$line |awk '{print $$9}'`; \
-                 sum=$$(( $$sum + $$fileSize )); \
-                 if test $$sum -ge $$maxPackageSize; then \
-                    sum=$$(( $$sum - $$fileSize )); \
-                    echo "NEW PACKAGE: OLD SUM $$sum"; \
-                    tar cvf $(TEMP_DIRS)/package.tar `cat $(TEMP_DIRS)/.files`; \
-                    cd $(TEMP_DIRS)/build-matlab_$$packageCount; \
-                    tar xvf $(TEMP_DIRS)/package.tar; \
-                    cd $(TEMP_DIRS)/build-matlab; \
-                    sum=$$fileSize; \
-                    packageCount=$$(( $$packageCount + 1 )); \
-                    mkdir  -p $(TEMP_DIRS)/build-matlab_$$packageCount; \
-                    cat /dev/null > $(TEMP_DIRS)/.files; \
-                 fi; \
-                 echo $$fileName >> $(TEMP_DIRS)/.files; \
-             done; \
-             tar cvf $(TEMP_DIRS)/package.tar `cat $(TEMP_DIRS)/.files`; \
-             cd $(TEMP_DIRS)/build-matlab_$$packageCount; \
-             tar xvf $(TEMP_DIRS)/package.tar; \
-             cd $(TEMP_DIRS)/build-matlab; \
-             mkdir -p $(TEMP_DIRS)/build-matlab_$$packageCount/appdata/products; \
-             mkdir -p $(TEMP_DIRS)/build-matlab_$$packageCount/appdata/components; \
-             cp -r -d appdata/products/* $(TEMP_DIRS)/build-matlab_$$packageCount/appdata/products; \
-             cp -r -d appdata/components/* $(TEMP_DIRS)/build-matlab_$$packageCount/appdata/components; \
-             rm -f $(TEMP_DIRS)/$$$$.tmp; \
-             rm -f $(TEMP_DIRS)/.files; \
-             rm -f $(TEMP_DIRS)/package.tar \
-             rm -f $(ROOT)/$(PKGROOT)/licenses/* \
-          )
-	  @echo "::: Package $(NAME) build complete :::"
+	cp installer_input $(SOURCE_DIR)
+	mkdir -p $(TEMP_DIRS)/build-matlab
+	perl -pi -e "s!ROLLINSTALL!$(TEMP_DIRS)/build-matlab!" $(SOURCE_DIR)/installer_input
+	perl -pi -e "s!FIK!$(FIK)!" $(SOURCE_DIR)/installer_input
+	perl -pi -e "s!ROLLPATH!$(REDHAT.ROOT)/src/matlab-license-files!" $(SOURCE_DIR)/installer_input
+	cp $(MANIFEST_DIR)/manifest.in $(MANIFEST_DIR)/manifest
+	( \
+	   export -n DISPLAY=; \
+	   cd $(SOURCE_DIR); \
+	   ./install   -inputFile installer_input ; \
+           rm -rf $(TEMP_DIRS)/build-matlab/licenses; \
+           packageCount=1; \
+           mkdir  -p $(TEMP_DIRS)/build-matlab_$${packageCount}; \
+           echo build-matlab_$${packageCount} >> $(MANIFEST_DIR)/manifest; \
+           cd  $(TEMP_DIRS)/build-matlab; \
+           find . ! -type d -exec ls -l {} \; >$(TEMP_DIRS)/$$$$.tmp; \
+           find . \( -name .\* -a ! -type d \) -exec ls -l {} \; >>$(TEMP_DIRS)/$$$$.tmp; \
+           sum=0; \
+           total=`du -b -s|awk '{print $$1}'`; \
+           maxPackageSize=$$(( $$total / ( $(PACKAGES) -1 ) )); \
+           echo "MAX SIZE=$$maxPackageSize"; \
+           exec <$(TEMP_DIRS)/$$$$.tmp; \
+           cat /dev/null > $(TEMP_DIRS)/.files; \
+           while read line; do \
+               fileSize=`echo $$line |awk '{print $$5}'`; \
+               fileName=`echo $$line |awk '{print $$9}'`; \
+               sum=$$(( $$sum + $$fileSize )); \
+               if test $$sum -ge $$maxPackageSize; then \
+                  sum=$$(( $$sum - $$fileSize )); \
+                  echo "NEW PACKAGE: OLD SUM $$sum"; \
+                  tar cvf $(TEMP_DIRS)/package.tar `cat $(TEMP_DIRS)/.files`; \
+                  cd $(TEMP_DIRS)/build-matlab_$$packageCount; \
+                  tar xvf $(TEMP_DIRS)/package.tar; \
+                  cd $(TEMP_DIRS)/build-matlab; \
+                  sum=$$fileSize; \
+                  packageCount=$$(( $$packageCount + 1 )); \
+                  mkdir  -p $(TEMP_DIRS)/build-matlab_$$packageCount; \
+                  cat /dev/null > $(TEMP_DIRS)/.files; \
+               fi; \
+               echo $$fileName >> $(TEMP_DIRS)/.files; \
+           done; \
+           tar cvf $(TEMP_DIRS)/package.tar `cat $(TEMP_DIRS)/.files`; \
+           cd $(TEMP_DIRS)/build-matlab_$$packageCount; \
+           tar xvf $(TEMP_DIRS)/package.tar; \
+           cd $(TEMP_DIRS)/build-matlab; \
+           mkdir -p $(TEMP_DIRS)/build-matlab_$$packageCount/appdata/products; \
+           mkdir -p $(TEMP_DIRS)/build-matlab_$$packageCount/appdata/components; \
+           cp -r -d appdata/products/* $(TEMP_DIRS)/build-matlab_$$packageCount/appdata/products; \
+           cp -r -d appdata/components/* $(TEMP_DIRS)/build-matlab_$$packageCount/appdata/components; \
+           rm -f $(TEMP_DIRS)/$$$$.tmp; \
+           rm -f $(TEMP_DIRS)/.files; \
+           rm -f $(TEMP_DIRS)/package.tar \
+           rm -f $(ROOT)/$(PKGROOT)/licenses/* \
+        )
+	@echo "::: Package $(NAME) build complete :::"
 
-install:: 
+install::
 	mkdir  -p -m 755 $(ROOT)/$(PKGROOT)
 	( \
           for PACKAGE in `seq 1 $(PACKAGES)`; do \
