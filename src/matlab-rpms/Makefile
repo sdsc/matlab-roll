@@ -56,23 +56,34 @@
 #
 # $Log$
 #
-
+#
 REDHAT.ROOT = $(CURDIR)/../../
+NODE_FILE = $(REDHAT.ROOT)/nodes/matlab-common.xml
+MANIFEST_DIR = $(REDHAT.ROOT)
+TEMP_DIRS = $(REDHAT.ROOT)/src/matlab
 
 -include $(ROCKSROOT)/etc/Rules.mk
 include Rules.mk
 include $(SDSCDEVEL)/Pull.mk
 include $(SDSCDEVEL)/Rules.mk
 
+
+TEMP_DIRS = $(REDHAT.ROOT)/src
+BUILDIT = 1
+
 build:
 
-
-install::
-	mkdir -p $(ROOT)/$(PKGROOT)
+install:: 
+	mkdir  -p -m 755 $(ROOT)/$(PKGROOT)
 	( \
-             cd  $(REDHAT.ROOT)/src/build-matlab_12; \
-             cp -r * -d $(ROOT)/$(PKGROOT) \
+           if test $(BUILDIT) -eq 1; then \
+             for PACKAGE in `seq 1 $(PACKAGES)`; do \
+               make NAME=$(NAME)_$${PACKAGE} BUILDDIR=build-matlab_$${PACKAGE} BUILDIT=0 rpm; \
+             done; \
+           else \
+             cp -r $(TEMP_DIRS)/$(BUILDDIR)/* -d $(ROOT)/$(PKGROOT); \
+           fi  \
         )
+	@echo "::: Package $(NAME) install complete :::"
 
 clean::
-	rm -rf $(SOURCE)

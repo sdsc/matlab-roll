@@ -59,9 +59,12 @@
 
 -include $(ROLLSROOT)/etc/Rolls.mk
 include Rolls.mk
+PACKAGES=18
 
-default: roll
+default: 
+	cp nodes/matlab-common.xml.in nodes/matlab-common.xml
+	$(MAKE) PACKAGES=$(PACKAGES) roll
 
 distclean:: clean
 	-rm -f _arch build.log
-	-rm -rf RPMS SRPMS src/build-*
+	-rm -rf RPMS SRPMS src/build-* src/*.tmp nodes/matlab-common.xml manifest

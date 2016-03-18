@@ -1,24 +1,5 @@
 SRCDIRS = `find . -maxdepth 1 -type d \
         -not -name CVS \
-        -not -name matlab_1 \
-        -not -name matlab_2 \
-        -not -name matlab_3 \
-        -not -name matlab_4 \
-        -not -name matlab_5 \
-        -not -name matlab_6 \
-        -not -name matlab_7 \
-        -not -name matlab_8 \
-        -not -name matlab_9 \
-        -not -name matlab_10 \
-        -not -name matlab_11 \
-        -not -name matlab_12 \
-        -not -name matlab_13 \
-        -not -name matlab_14 \
-        -not -name matlab_15 \
-        -not -name matlab_16 \
-        -not -name matlab_17 \
-        -not -name matlab-modules \
-        -not -name matlab-scripts \
-        -not -name matlab-license-files \
-        -not -name build\* \
-        -not -name .` matlab_1 matlab_2 matlab_3 matlab_4 matlab_5 matlab_6 matlab_7 matlab_8 matlab_9 matlab_10 matlab_11 matlab_12 matlab_13 matlab_14 matlab_15 matlab_16 matlab_17 matlab-modules matlab-scripts
+        -not -name matlab-rpms \
+        -not -name build-\* \
+        -not -name .` matlab-rpms

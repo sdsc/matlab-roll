@@ -1,9 +1,9 @@
 NAME               = sdsc-matlab
 VERSION            = 2015b
-RELEASE            = 1
+RELEASE            = 2
 RPM.EXTRAS         = "Autoprov: 0"
 RPM.EXTRAS         = AutoReq:No
-PKGROOT            = /opt/$(NAME)/$(VERSION)
+PKGROOT            = /opt/matlab/$(VERSION)
 
 SRC_SUBDIR         = matlab
 

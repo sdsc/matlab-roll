@@ -2,3 +2,4 @@
 module-whatis "matlab"
 module-whatis "Version: VERSION"
 prepend-path PATH /opt/matlab/VERSION/bin
+prepend-path LM_LICENSE_FILE $env(HOME)/.matlab/RVERSION_licenses
