@@ -1,5 +1,5 @@
 NAME               = sdsc-matlab
-VERSION            = 2015b
+VERSION            = 2016a
 RELEASE            = 0
 RPM.EXTRAS         = "Autoprov: 0"
 RPM.EXTRAS         = AutoReq:No
