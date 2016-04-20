@@ -101,7 +101,7 @@ build: $(SRC_DIRS)
            find . \( -name .\* -a ! -type d \) -exec ls -l {} \; >>$(TEMP_DIRS)/$$$$.tmp; \
            sum=0; \
            total=`du -b -s|awk '{print $$1}'`; \
-           maxPackageSize=$$(( $$total / ( $(PACKAGES) -1 ) )); \
+           maxPackageSize=$$(( $$total / ( $(PACKAGES) ) )); \
            echo "MAX SIZE=$$maxPackageSize"; \
            exec <$(TEMP_DIRS)/$$$$.tmp; \
            cat /dev/null > $(TEMP_DIRS)/.files; \
