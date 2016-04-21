@@ -97,7 +97,7 @@ build: $(SRC_DIRS)
            mkdir  -p $(TEMP_DIRS)/build-matlab_$${packageCount}; \
            echo build-matlab_$${packageCount} >> $(MANIFEST_DIR)/manifest; \
            cd  $(TEMP_DIRS)/build-matlab; \
-           split -b 500000000 toolbox/compiler/deploy/glnxa64/MCRInstaller.zip toolbox/compiter/deploy/glnxa64/MCRInstaller.zip.x ; \
+           split -b 500000000 toolbox/compiler/deploy/glnxa64/MCRInstaller.zip toolbox/compiler/deploy/glnxa64/MCRInstaller.zip.x ; \
            find . ! -type d -exec ls -l {} \; >$(TEMP_DIRS)/$$$$.tmp; \
            find . \( -name .\* -a ! -type d \) -exec ls -l {} \; >>$(TEMP_DIRS)/$$$$.tmp; \
            sum=0; \

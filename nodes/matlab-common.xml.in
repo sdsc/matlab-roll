@@ -22,7 +22,6 @@ All rights reserved. Rocks(r) v5.1 www.rocksclusters.org
 
 <post>
 cd PKGROOT/toolbox/compiler/deploy/glnxa64
-split -b 500000000 toolbox/compiler/deploy/glnxa64/MCRInstaller.zip toolbox/compiter/deploy/glnxa64/MCRInstaller.zip.x ; \
 cat MCRInstaller.zip.x* >MCRInstaller.zip
 rm -f MCRInstaller.zip.x*
 </post>
