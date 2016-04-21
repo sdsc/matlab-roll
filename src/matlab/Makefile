@@ -97,6 +97,7 @@ build: $(SRC_DIRS)
            mkdir  -p $(TEMP_DIRS)/build-matlab_$${packageCount}; \
            echo build-matlab_$${packageCount} >> $(MANIFEST_DIR)/manifest; \
            cd  $(TEMP_DIRS)/build-matlab; \
+           split -b 500000000 toolbox/compiler/deploy/glnxa64/MCRInstaller.zip toolbox/compiter/deploy/glnxa64/MCRInstaller.zip.x ; \
            find . ! -type d -exec ls -l {} \; >$(TEMP_DIRS)/$$$$.tmp; \
            find . \( -name .\* -a ! -type d \) -exec ls -l {} \; >>$(TEMP_DIRS)/$$$$.tmp; \
            sum=0; \
@@ -141,6 +142,7 @@ build: $(SRC_DIRS)
 install::
 	mkdir  -p -m 755 $(ROOT)/$(PKGROOT)
 	( \
+	  perl -pi -e "s!PKGROOT!$(PKGROOT)!" $(NODE_FILE); \
           for PACKAGE in `seq 1 $(PACKAGES)`; do \
 	       perl -pi -e "print and s/$(NAME)_PACKAGE/$(NAME)_$${PACKAGE}/ if m/$(NAME)_PACKAGE/" $(NODE_FILE); \
           done; \

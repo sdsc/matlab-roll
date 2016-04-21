@@ -59,7 +59,7 @@
 
 -include $(ROLLSROOT)/etc/Rolls.mk
 include Rolls.mk
-PACKAGES=20
+PACKAGES=18
 
 default: 
 	cp nodes/matlab-common.xml.in nodes/matlab-common.xml
