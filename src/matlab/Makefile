@@ -125,7 +125,7 @@ build: $(SRC_DIRS)
                fi; \
                echo $$fileName >> $(TEMP_DIRS)/.files; \
            done; \
-           cat $$packageCount > $(TEMP_DIRS)/packageCount; \
+           echo $$packageCount > $(TEMP_DIRS)/packageCount; \
            tar cvf $(TEMP_DIRS)/package.tar `cat $(TEMP_DIRS)/.files`; \
            cd $(TEMP_DIRS)/build-matlab_$$packageCount; \
            tar xvf $(TEMP_DIRS)/package.tar; \
