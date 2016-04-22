@@ -125,6 +125,7 @@ build: $(SRC_DIRS)
                fi; \
                echo $$fileName >> $(TEMP_DIRS)/.files; \
            done; \
+           cat $$packageCount > $(TEMP_DIRS)/packageCount; \
            tar cvf $(TEMP_DIRS)/package.tar `cat $(TEMP_DIRS)/.files`; \
            cd $(TEMP_DIRS)/build-matlab_$$packageCount; \
            tar xvf $(TEMP_DIRS)/package.tar; \
@@ -144,7 +145,8 @@ install::
 	mkdir  -p -m 755 $(ROOT)/$(PKGROOT)
 	( \
 	  perl -pi -e "s!PKGROOT!$(PKGROOT)!" $(NODE_FILE); \
-          for PACKAGE in `seq 1 $(PACKAGES)`; do \
+          packageCount=`cat $(TEMP_DIRS)/packageCount`; \
+          for PACKAGE in `seq 1 $${packageCount}`; do \
 	       perl -pi -e "print and s/$(NAME)_PACKAGE/$(NAME)_$${PACKAGE}/ if m/$(NAME)_PACKAGE/" $(NODE_FILE); \
           done; \
 	  perl -pi -e '$$_ = "" if m/$(NAME)_PACKAGE/' $(NODE_FILE); \
@@ -152,5 +154,5 @@ install::
 	@echo "::: Package $(NAME) install complete :::"
 
 clean::
-	rm -rf $(SOURCE_DIR) *.tmp DESCRIPTION build-*
+	rm -rf $(SOURCE_DIR) $(TEMP_DIRS)/*.tmp DESCRIPTION $(TEMP_DIRS)/build-* $(TEMP_DIRS)/packageCount
 
