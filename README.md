@@ -25,7 +25,7 @@ You *must* have 2 files s in order to build this roll...
 in 'src/matlab/` :
     fik.txt     - contains your MATLAB 'File Installation Key'
 in 'src/matlab/` :
-    license.dat - contains your MATLAB client license file
+    *.dat,*.lic - contains your MATLAB client license file(s). (Typically license files are named "license.dat" and/or "network.lic but almost always they have a .dat or .lic suffix)
 
 Both should be obtained from The Mathworks or your MATLAB License administrator.
 
