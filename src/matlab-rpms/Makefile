@@ -77,7 +77,8 @@ install::
 	mkdir  -p -m 755 $(ROOT)/$(PKGROOT)
 	( \
            if test $(BUILDIT) -eq 1; then \
-             for PACKAGE in `seq 1 $(PACKAGES)`; do \
+             packageCount=`cat $(TEMP_DIRS)/packageCount`; \
+             for PACKAGE in `seq 1 $${packageCount}`; do \
                make NAME=$(NAME)_$${PACKAGE} BUILDDIR=build-matlab_$${PACKAGE} BUILDIT=0 rpm; \
              done; \
            else \

@@ -97,11 +97,13 @@ build: $(SRC_DIRS)
            mkdir  -p $(TEMP_DIRS)/build-matlab_$${packageCount}; \
            echo build-matlab_$${packageCount} >> $(MANIFEST_DIR)/manifest; \
            cd  $(TEMP_DIRS)/build-matlab; \
+           split -b 500000000 toolbox/compiler/deploy/glnxa64/MCRInstaller.zip toolbox/compiler/deploy/glnxa64/MCRInstaller.zip.x ; \
+           rm -f toolbox/compiler/deploy/glnxa64/MCRInstaller.zip; \
            find . ! -type d -exec ls -l {} \; >$(TEMP_DIRS)/$$$$.tmp; \
            find . \( -name .\* -a ! -type d \) -exec ls -l {} \; >>$(TEMP_DIRS)/$$$$.tmp; \
            sum=0; \
            total=`du -b -s|awk '{print $$1}'`; \
-           maxPackageSize=$$(( $$total / ( $(PACKAGES) -1 ) )); \
+           maxPackageSize=$$(( $$total / ( $(PACKAGES) ) )); \
            echo "MAX SIZE=$$maxPackageSize"; \
            exec <$(TEMP_DIRS)/$$$$.tmp; \
            cat /dev/null > $(TEMP_DIRS)/.files; \
@@ -123,6 +125,7 @@ build: $(SRC_DIRS)
                fi; \
                echo $$fileName >> $(TEMP_DIRS)/.files; \
            done; \
+           echo $$packageCount > $(TEMP_DIRS)/packageCount; \
            tar cvf $(TEMP_DIRS)/package.tar `cat $(TEMP_DIRS)/.files`; \
            cd $(TEMP_DIRS)/build-matlab_$$packageCount; \
            tar xvf $(TEMP_DIRS)/package.tar; \
@@ -141,7 +144,9 @@ build: $(SRC_DIRS)
 install::
 	mkdir  -p -m 755 $(ROOT)/$(PKGROOT)
 	( \
-          for PACKAGE in `seq 1 $(PACKAGES)`; do \
+	  perl -pi -e "s!PKGROOT!$(PKGROOT)!" $(NODE_FILE); \
+          packageCount=`cat $(TEMP_DIRS)/packageCount`; \
+          for PACKAGE in `seq 1 $${packageCount}`; do \
 	       perl -pi -e "print and s/$(NAME)_PACKAGE/$(NAME)_$${PACKAGE}/ if m/$(NAME)_PACKAGE/" $(NODE_FILE); \
           done; \
 	  perl -pi -e '$$_ = "" if m/$(NAME)_PACKAGE/' $(NODE_FILE); \
@@ -149,5 +154,5 @@ install::
 	@echo "::: Package $(NAME) install complete :::"
 
 clean::
-	rm -rf $(SOURCE_DIR) *.tmp DESCRIPTION build-*
+	rm -rf $(SOURCE_DIR) $(TEMP_DIRS)/*.tmp DESCRIPTION $(TEMP_DIRS)/build-* $(TEMP_DIRS)/packageCount
 

@@ -68,7 +68,7 @@ build:
 
 install::
 	mkdir -p $(ROOT)/$(PKGROOT)/licenses
-	cp license.dat network.lic $(ROOT)/$(PKGROOT)/licenses
+	cp *.dat *.lic $(ROOT)/$(PKGROOT)/licenses
 
 clean::
 	rm -rf $(SOURCE)

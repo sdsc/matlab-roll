@@ -20,12 +20,12 @@ for numerical computation, visualization, and programming.
 To build/install this roll you must have root access to a Rocks development
 machine (e.g., a frontend or development appliance).
 
-You *must* place two files in `src/matlab/` in order to build this roll...
+You *must* have 2 files in order to build this roll...
 
-```
+in 'src/matlab/` :
     fik.txt     - contains your MATLAB 'File Installation Key'
-    license.dat - contains your MATLAB client license file
-```
+in 'src/matlab/` :
+    *.dat,*.lic - contains your MATLAB client license file(s). (Typically license files are named "license.dat" and/or "network.lic but almost always they have a .dat or .lic suffix)
 
 Both should be obtained from The Mathworks or your MATLAB License administrator.
 
