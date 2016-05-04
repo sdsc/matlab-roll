@@ -93,6 +93,7 @@ build: $(SRC_DIRS)
 	   cd $(SOURCE_DIR); \
 	   ./install   -inputFile installer_input ; \
            rm -rf $(TEMP_DIRS)/build-matlab/licenses; \
+           unzip -d $(TEMP_DIRS)/build-matlab ../attachment_1374124_16a_glnxa64_2016-04-18.zip; \
            packageCount=1; \
            mkdir  -p $(TEMP_DIRS)/build-matlab_$${packageCount}; \
            echo build-matlab_$${packageCount} >> $(MANIFEST_DIR)/manifest; \
