@@ -135,6 +135,7 @@ build: $(SRC_DIRS)
            mkdir -p $(TEMP_DIRS)/build-matlab_$$packageCount/appdata/components; \
            cp -r -d appdata/products/* $(TEMP_DIRS)/build-matlab_$$packageCount/appdata/products; \
            cp -r -d appdata/components/* $(TEMP_DIRS)/build-matlab_$$packageCount/appdata/components; \
+           cp $(REDHAT.ROOT)/src/matlab/mdcs_files/* $(TEMP_DIRS)/build-matlab_$$packageCount/toolbox/local; \
            rm -f $(TEMP_DIRS)/$$$$.tmp; \
            rm -f $(TEMP_DIRS)/.files; \
            rm -f $(TEMP_DIRS)/package.tar \
