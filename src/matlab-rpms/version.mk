@@ -1,3 +1,4 @@
+PACKAGE            = matlab
 NAME               = sdsc-matlab
 VERSION            = 2016a
 RELEASE            = 0
