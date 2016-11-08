@@ -1,3 +1,4 @@
+PACKAGE = matlab
 NAME    = sdsc-matlab-license-files
 VERSION_SRC = $(REDHAT.ROOT)/src/$(PACKAGE)/version.mk
 VERSION_INC = version.inc
