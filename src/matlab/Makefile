@@ -84,14 +84,11 @@ FIK := $(shell cat fik.txt)
 build: $(SRC_DIRS)
 	cp installer_input $(SOURCE_DIR)
 	mkdir -p $(TEMP_DIRS)/build-matlab
-	perl -pi -e "s!ROLLINSTALL!$(TEMP_DIRS)/build-matlab!" $(SOURCE_DIR)/installer_input
-	perl -pi -e "s!FIK!$(FIK)!" $(SOURCE_DIR)/installer_input
-	perl -pi -e "s!ROLLPATH!$(REDHAT.ROOT)/src/matlab-license-files!" $(SOURCE_DIR)/installer_input
 	cp $(MANIFEST_DIR)/manifest.in $(MANIFEST_DIR)/manifest
 	( \
 	   export -n DISPLAY=; \
 	   cd $(SOURCE_DIR); \
-	   ./install   -inputFile installer_input ; \
+	   ./install  -mode silent  -destinationFolder $(TEMP_DIRS)/build-matlab -fileInstallationKey $(FIK) -agreeToLicense yes -outputFile /tmp/matlab.log -licensePath $(REDHAT.ROOT)/src/matlab-license-files/network.lic -lmgrFiles false -lmgrService false; \
            rm -rf $(TEMP_DIRS)/build-matlab/licenses; \
            unzip -o -d $(TEMP_DIRS)/build-matlab ../attachment_1374124_16a_glnxa64_2016-04-18.zip; \
            packageCount=1; \
