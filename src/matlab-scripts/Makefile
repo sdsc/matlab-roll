@@ -66,6 +66,9 @@ REDHAT.ROOT = $(PWD)/../../
 build:
 
 
+$(VERSION_INC): $(VERSION_SRC)
+	/bin/grep 'VERSION.*=' $(VERSION_SRC) > $@
+
 install::
 	mkdir -p $(ROOT)/$(PKGROOT)/bin
 	cp startmatlab startmatlab.gpu endmatlab $(ROOT)/$(PKGROOT)/bin
