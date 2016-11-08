@@ -82,7 +82,6 @@ FIK := $(shell cat fik.txt)
 
 
 build: $(SRC_DIRS)
-	cp installer_input $(SOURCE_DIR)
 	mkdir -p $(TEMP_DIRS)/build-matlab
 	cp $(MANIFEST_DIR)/manifest.in $(MANIFEST_DIR)/manifest
 	( \
