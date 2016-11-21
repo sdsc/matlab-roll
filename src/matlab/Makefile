@@ -90,7 +90,6 @@ build: $(SRC_DIRS)
 	   ./install  -mode silent  -destinationFolder $(TEMP_DIRS)/build-matlab -fileInstallationKey $(FIK) -agreeToLicense yes -outputFile /tmp/matlab.log -licensePath $(REDHAT.ROOT)/src/matlab-license-files/network.lic -lmgrFiles false -lmgrService false; \
            cp $(REDHAT.ROOT)/src/matlab/mdcs_files/* $(TEMP_DIRS)/build-matlab/toolbox/local; \
            rm -rf $(TEMP_DIRS)/build-matlab/licenses; \
-           unzip -o -d $(TEMP_DIRS)/build-matlab ../attachment_1374124_16a_glnxa64_2016-04-18.zip; \
            packageCount=1; \
            mkdir  -p $(TEMP_DIRS)/build-matlab_$${packageCount}; \
            echo build-matlab_$${packageCount} >> $(MANIFEST_DIR)/manifest; \
