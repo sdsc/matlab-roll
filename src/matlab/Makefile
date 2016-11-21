@@ -88,6 +88,7 @@ build: $(SRC_DIRS)
 	   export -n DISPLAY=; \
 	   cd $(SOURCE_DIR); \
 	   ./install  -mode silent  -destinationFolder $(TEMP_DIRS)/build-matlab -fileInstallationKey $(FIK) -agreeToLicense yes -outputFile /tmp/matlab.log -licensePath $(REDHAT.ROOT)/src/matlab-license-files/network.lic -lmgrFiles false -lmgrService false; \
+           cp $(REDHAT.ROOT)/src/matlab/mdcs_files/* $(TEMP_DIRS)/build-matlab/toolbox/local; \
            rm -rf $(TEMP_DIRS)/build-matlab/licenses; \
            unzip -o -d $(TEMP_DIRS)/build-matlab ../attachment_1374124_16a_glnxa64_2016-04-18.zip; \
            packageCount=1; \
@@ -131,7 +132,6 @@ build: $(SRC_DIRS)
            mkdir -p $(TEMP_DIRS)/build-matlab_$$packageCount/appdata/components; \
            cp -r -d appdata/products/* $(TEMP_DIRS)/build-matlab_$$packageCount/appdata/products; \
            cp -r -d appdata/components/* $(TEMP_DIRS)/build-matlab_$$packageCount/appdata/components; \
-           cp $(REDHAT.ROOT)/src/matlab/mdcs_files/* $(TEMP_DIRS)/build-matlab_$$packageCount/toolbox/local; \
            rm -f $(TEMP_DIRS)/$$$$.tmp; \
            rm -f $(TEMP_DIRS)/.files; \
            rm -f $(TEMP_DIRS)/package.tar \
