@@ -71,6 +71,9 @@ include $(SDSCDEVEL)/Rules.mk
 TEMP_DIRS = $(REDHAT.ROOT)/src
 BUILDIT = 1
 
+$(VERSION_INC): $(VERSION_SRC)
+	/bin/grep 'VERSION.*=' $(VERSION_SRC) > $@
+
 build:
 
 install:: 

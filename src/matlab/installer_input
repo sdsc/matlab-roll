@@ -1,8 +1,0 @@
-destinationFolder=ROLLINSTALL
-fileInstallationKey=FIK
-agreeToLicense=yes
-outputFile=/tmp/matlab.log
-mode=silent
-licensePath=ROLLPATH/network.lic
-lmgrFiles=false
-lmgrService=false
