@@ -67,10 +67,9 @@ build:
 $(VERSION_INC): $(VERSION_SRC)
 	/bin/grep 'VERSION.*=' $(VERSION_SRC) > $@
 
-
 install::
-	mkdir -p $(ROOT)/$(PKGROOT)/licenses
-	cp *.dat *.lic $(ROOT)/$(PKGROOT)/licenses
+	mkdir -p $(ROOT)/$(PKGROOT)
+	cp *.dat *.lic $(ROOT)/$(PKGROOT)
 
 clean::
 	rm -rf $(SOURCE)
