@@ -12,13 +12,17 @@ Copyright (c) 2000 - 2017 The Regents of the University of California.
 All rights reserved. Rocks(r) v7.0 www.rocksclusters.org
 </copyright>
 
-<changelog>
-</changelog>
-
-<edge from="client">
+<edge from="compute">
   <to>matlab-common</to>
 </edge>
-<order head="client">
+<order head="compute">
+  <tail>matlab-common</tail>
+</order>
+
+<edge from="login">
+  <to>matlab-common</to>
+</edge>
+<order head="login">
   <tail>matlab-common</tail>
 </order>
 
