@@ -14,10 +14,10 @@ my $output;
 
 # matlab-common.xml
 if($appliance =~ /$installedOnAppliancesPattern/) {
-  ok(-d "/opt/matlab", 'matlab installed');
+  ok(-d "/opt/matlab/VERSION", 'matlab installed');
   $isInstalled = 1;
 } else {
-  ok(! -d "/opt/matlab", 'matlab not installed');
+  ok(! -d "/opt/matlab/VERSION", 'matlab not installed');
   $isInstalled = 0;
 }
 
