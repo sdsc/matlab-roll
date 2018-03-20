@@ -1,10 +1,13 @@
-PACKAGE            = matlab
-NAME               = sdsc-matlab
-VERSION            = 2016a
-RELEASE            = 0
-RPM.EXTRAS         = "Autoprov: 0"
-RPM.EXTRAS         = AutoReq:No
+PACKAGE     = matlab
+
+NAME        = sdsc-matlab
+VERSION     = 2016a
+RELEASE     = 1
+PKGROOT     = /opt/matlab/$(VERSION)
+
 VERSION_SRC = $(REDHAT.ROOT)/src/$(PACKAGE)/version.mk
 VERSION_INC = version.inc
 include $(VERSION_INC)
-PKGROOT            = /opt/matlab/$(VERSION)
+
+RPM.EXTRAS  = AutoReq:No\nAutoProv:No
+RPM.PREFIX  = $(PKGROOT)
