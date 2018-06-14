@@ -1,0 +1,30 @@
+Only in .: README
+diff -r ./communicatingSubmitFcn.m /tmp/pbs_nonshared/communicatingSubmitFcn.m
+52c52
+<     currentValue = getenv(variableName);
+---
+>     currentValue = cluster.AdditionalProperties.Ppn;
+97c97
+< procsPerNode = 2;
+---
+> procsPerNode = cluster.AdditionalProperties.Ppn;
+99c99,101
+< additionalSubmitArgs = sprintf('-l nodes=%d:ppn=%d', numberOfNodes, procsPerNode);
+---
+> additionalSubmitArgs = sprintf('-l nodes=%d:ppn=%d,walltime=%s -q %s -A %s',...
+>        numberOfNodes, procsPerNode,cluster.AdditionalProperties.Time,...
+>        cluster.AdditionalProperties.Queue,cluster.AdditionalProperties.Aname);
+118a121
+> disp(cmdOut);
+diff -r ./getSubmitString.m /tmp/pbs_nonshared/getSubmitString.m
+15c15
+<     jobName, quotedLogFile, envString, additionalSubmitArgs, quotedCommand);
+---
+>     jobName, quotedLogFile, envString, additionalSubmitArgs, quotedCommand)
+diff -r ./independentSubmitFcn.m /tmp/pbs_nonshared/independentSubmitFcn.m
+103c103,104
+<     additionalSubmitArgs = '';
+---
+>     additionalSubmitArgs = sprintf('-l nodes=1:ppn=1,walltime=%s -q %s -A %s',...
+>          cluster.AdditionalProperties.Time,cluster.AdditionalProperties.Queue,cluster.AdditionalProperties.Aname);
+Only in .: o

@@ -1,48 +1,47 @@
-function independentSubmitFcn_slurm(cluster,job, props,account,time,queue)
-%INDEPENDENTSUBMITFCN Submit a MATLAB job to a SLURM cluster
+function independentSubmitFcn(cluster, job, environmentProperties)
+%INDEPENDENTSUBMITFCN Submit a MATLAB job to a PBS cluster
 %
-% Set your cluster's IndependentSubmitFcn to this function using the following
-% command:
-%     set(cluster, 'IndependentSubmitFcn', @independentSubmitFcn);
+% Set your cluster's IntegrationScriptsLocation to the parent folder of this
+% function to run it when you submit an independent job.
 %
 % See also parallel.cluster.generic.independentDecodeFcn.
-%
 
-% Copyright 2010-2015 The MathWorks, Inc.
+% Copyright 2010-2017 The MathWorks, Inc.
 
 % Store the current filename for the errors, warnings and dctSchedulerMessages
 currFilename = mfilename;
 if ~isa(cluster, 'parallel.Cluster')
-    error('parallelexamples:GenericSLURM:SubmitFcnError', ...
+    error('parallelexamples:GenericPBS:SubmitFcnError', ...
         'The function %s is for use with clusters created using the parcluster command.', currFilename)
 end
 
 decodeFunction = 'parallel.cluster.generic.independentDecodeFcn';
 
 if ~cluster.HasSharedFilesystem
-    error('parallelexamples:GenericSLURM:SubmitFcnError', ...
+    error('parallelexamples:GenericPBS:SubmitFcnError', ...
         'The submit function %s is for use with shared filesystems.', currFilename)
 end
 
+
 if ~strcmpi(cluster.OperatingSystem, 'unix')
-    error('parallelexamples:GenericSLURM:SubmitFcnError', ...
+    error('parallelexamples:GenericPBS:SubmitFcnError', ...
         'The submit function %s only supports clusters with unix OS.', currFilename)
 end
 
 % The job specific environment variables
 % Remove leading and trailing whitespace from the MATLAB arguments
-matlabArguments = strtrim(props.MatlabArguments);
+matlabArguments = strtrim(environmentProperties.MatlabArguments);
 variables = {'MDCE_DECODE_FUNCTION', decodeFunction; ...
-    'MDCE_STORAGE_CONSTRUCTOR', props.StorageConstructor; ...
-    'MDCE_JOB_LOCATION', props.JobLocation; ...
-    'MDCE_MATLAB_EXE', props.MatlabExecutable; ...
+    'MDCE_STORAGE_CONSTRUCTOR', environmentProperties.StorageConstructor; ...
+    'MDCE_JOB_LOCATION', environmentProperties.JobLocation; ...
+    'MDCE_MATLAB_EXE', environmentProperties.MatlabExecutable; ...
     'MDCE_MATLAB_ARGS', matlabArguments; ...
     'MDCE_DEBUG', 'true'; ...
-    'MLM_WEB_LICENSE', props.UseMathworksHostedLicensing; ...
-    'MLM_WEB_USER_CRED', props.UserToken; ...
-    'MLM_WEB_ID', props.LicenseWebID; ...
-    'MDCE_LICENSE_NUMBER', props.LicenseNumber; ...
-    'MDCE_STORAGE_LOCATION', props.StorageLocation};
+    'MLM_WEB_LICENSE', environmentProperties.UseMathworksHostedLicensing; ...
+    'MLM_WEB_USER_CRED', environmentProperties.UserToken; ...
+    'MLM_WEB_ID', environmentProperties.LicenseWebID; ...
+    'MDCE_LICENSE_NUMBER', environmentProperties.LicenseNumber; ...
+    'MDCE_STORAGE_LOCATION', environmentProperties.StorageLocation};
 % Set each environment variable to newValue if currentValue differs.
 % We must do this particularly when newValue is an empty value,
 % to be sure that we clear out old values from the environment.
@@ -78,11 +77,11 @@ quotedScriptName = sprintf('%s%s%s', quote, fullfile(dirpart, scriptName), quote
 
 % Get the tasks for use in the loop
 tasks = job.Tasks;
-numberOfTasks = props.NumberOfTasks;
+numberOfTasks = environmentProperties.NumberOfTasks;
 jobIDs = cell(numberOfTasks, 1);
 % Loop over every task we have been asked to submit
 for ii = 1:numberOfTasks
-    taskLocation = props.TaskLocations{ii};
+    taskLocation = environmentProperties.TaskLocations{ii};
     % Set the environment variable that defines the location of this task
     setenv('MDCE_TASK_LOCATION', taskLocation);
     
@@ -93,14 +92,21 @@ for ii = 1:numberOfTasks
     
     % Submit one task at a time
     jobName = sprintf('Job%d.%d', job.ID, tasks(ii).ID);
+    % PBS jobs names must not exceed 15 characters
+    maxJobNameLength = 15;
+    if length(jobName) > maxJobNameLength
+        jobName = jobName(1:maxJobNameLength);
+    end
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %% CUSTOMIZATION MAY BE REQUIRED %%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % You may also wish to supply additional submission arguments to
-    % the qsub command here.
-    additionalSubmitArgs = sprintf('--export=ALL -L matlab:1 --nodes=1 --tasks-per-node=1 -t %s -p %s -A %s',time,queue,account);
+    additionalSubmitArgs = '';
+    commonSubmitArgs = getCommonSubmitArgs(cluster);
+    if ~isempty(commonSubmitArgs) && ischar(commonSubmitArgs)
+        additionalSubmitArgs = strtrim([additionalSubmitArgs, ' ', commonSubmitArgs]);
+    end
     dctSchedulerMessage(5, '%s: Generating command for task %i', currFilename, ii);
-    commandToRun = getSubmitString_slurm(jobName, quotedLogFile, quotedScriptName, ...
+    commandToRun = getSubmitString(jobName, quotedLogFile, quotedScriptName, ...
         variablesToForward, additionalSubmitArgs);   
     
     % Now ask the cluster to run the submission command
@@ -113,15 +119,15 @@ for ii = 1:numberOfTasks
         cmdOut = err.message;
     end
     if cmdFailed
-        error('parallelexamples:GenericSLURM:SubmissionFailed', ...
+        error('parallelexamples:GenericPBS:SubmissionFailed', ...
             'Submit failed with the following message:\n%s', cmdOut);
     end
     
     dctSchedulerMessage(1, '%s: Job output will be written to: %s\nSubmission output: %s\n', currFilename, logFile, cmdOut);
-    jobIDs{ii} = extractJobId_slurm(cmdOut);
+    jobIDs{ii} = extractJobId(cmdOut);
     
     if isempty(jobIDs{ii})
-        warning('parallelexamples:GenericSLURM:FailedToParseSubmissionOutput', ...
+        warning('parallelexamples:GenericPBS:FailedToParseSubmissionOutput', ...
             'Failed to parse the job identifier from the submission output: "%s"', ...
             cmdOut);
     end

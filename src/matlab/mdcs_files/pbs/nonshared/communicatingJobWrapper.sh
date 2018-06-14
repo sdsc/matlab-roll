@@ -1,5 +1,5 @@
 #!/bin/sh
-# This wrapper script is intended to be submitted to SLURM to support
+# This wrapper script is intended to be submitted to PBS to support
 # communicating jobs.
 #
 # This script uses the following environment variables set by the submit MATLAB code:
@@ -13,13 +13,13 @@
 # MDCE_STORAGE_CONSTRUCTOR - used by decode function 
 # MDCE_JOB_LOCATION        - used by decode function 
 
-# Copyright 2006-2012 The MathWorks, Inc.
+# Copyright 2006-2017 The MathWorks, Inc.
 
 # Create full paths to mw_smpd/mw_mpiexec if needed
 FULL_SMPD=${MDCE_CMR:+${MDCE_CMR}/bin/}mw_smpd
 FULL_MPIEXEC=${MDCE_CMR:+${MDCE_CMR}/bin/}mw_mpiexec
 SMPD_LAUNCHED_HOSTS=""
-MPIEXEC_CODE=0
+
 ###################################
 ## CUSTOMIZATION MAY BE REQUIRED ##
 ###################################
@@ -28,8 +28,6 @@ MPIEXEC_CODE=0
 # You may wish to modify SSH_COMMAND to include any additional ssh options that
 # you require.
 SSH_COMMAND="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
-
-export PBS_NODEFILE=`generate_pbs_nodefile`
 
 # Work out where we need to launch SMPDs given our hosts file - defines
 # SMPD_HOSTS
@@ -45,8 +43,10 @@ chooseSmpdHosts() {
 
 # Work out which port to use for SMPD
 chooseSmpdPort() {
-    # Choose unique port for SMPD to run on. SLURM_JOBID is something like
-    JOB_NUM=$SLURM_JOBID
+    # Choose unique port for SMPD to run on. PBS_JOBID is something like
+    # 15.pbs-server-host.domain.com, so we extract the numeric part of that
+    # using sed.
+    JOB_NUM=`echo ${PBS_JOBID:?"PBS_JOBID undefined"} | sed 's#^\([0-9][0-9]*\).*$#\1#'`
     # Base smpd_port on the numeric part of the above
     SMPD_PORT=`expr $JOB_NUM % 10000 + 20000`
 }
@@ -56,10 +56,9 @@ chooseMachineArg() {
     MACHINE_ARG="-n ${MDCE_TOTAL_TASKS} -machinefile ${PBS_NODEFILE}"
 }
 
-# Now that we have launched the SMPDs, we must install a trap to ensure that
-# they are closed either in the case of normal exit, or job cancellation:
-# Default value of the return code
+# Shut down SMPDs and exit with the exit code of the last command executed
 cleanupAndExit() {
+    EXIT_CODE=${?}
     echo ""
     echo "Stopping SMPD on ${SMPD_LAUNCHED_HOSTS} ..."
     for host in ${SMPD_LAUNCHED_HOSTS}
@@ -67,8 +66,8 @@ cleanupAndExit() {
         echo ${SSH_COMMAND} $host \"${FULL_SMPD}\" -shutdown -phrase MATLAB -port ${SMPD_PORT}
         ${SSH_COMMAND} $host \"${FULL_SMPD}\" -shutdown -phrase MATLAB -port ${SMPD_PORT}
     done
-    echo "Exiting with code: ${MPIEXEC_CODE}"
-    exit ${MPIEXEC_CODE}
+    echo "Exiting with code: ${EXIT_CODE}"
+    exit ${EXIT_CODE}
 }
 
 # Use ssh to launch the SMPD daemons on each processor
@@ -80,8 +79,7 @@ launchSmpds() {
       echo ${SSH_COMMAND} $host \"${FULL_SMPD}\" -s -phrase MATLAB -port ${SMPD_PORT}
       ${SSH_COMMAND} $host \"${FULL_SMPD}\" -s -phrase MATLAB -port ${SMPD_PORT}
       ssh_return=${?}
-      if [ ${ssh_return} -ne 0 ]
-          then
+      if [ ${ssh_return} -ne 0 ] ; then
           echo "Launching smpd failed for node: ${host}"
           exit 1
       else
@@ -104,17 +102,22 @@ runMpiexec() {
         MDCE_DECODE_FUNCTION,MDCE_STORAGE_LOCATION,MDCE_STORAGE_CONSTRUCTOR,MDCE_JOB_LOCATION,MDCE_DEBUG,MDCE_LICENSE_NUMBER,MLM_WEB_LICENSE,MLM_WEB_USER_CRED,MLM_WEB_ID \
         \"${MDCE_MATLAB_EXE}\" ${MDCE_MATLAB_ARGS}
     MPIEXEC_CODE=${?}
+    if [ ${MPIEXEC_CODE} -ne 0 ] ; then
+        exit ${MPIEXEC_CODE}
+    fi
 }
 
 # Define the order in which we execute the stages defined above
 MAIN() {
+    # Install a trap to ensure that SMPDs are closed if something errors or the
+    # job is cancelled.
     trap "cleanupAndExit" 0 1 2 15
     chooseSmpdHosts
     chooseSmpdPort
     launchSmpds
     chooseMachineArg
     runMpiexec
-    exit ${MPIEXEC_CODE}
+    exit 0 # Explicitly exit 0 to trigger cleanupAndExit
 }
 
 # Call the MAIN loop

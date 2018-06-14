@@ -1,0 +1,116 @@
+13c13
+<     error('parallelexamples:GenericSLURM:IncorrectArguments', ...
+---
+>     error('parallelexamples:GenericPBS:IncorrectArguments', ...
+17c17
+<     error('parallelexamples:GenericSLURM:RemoteJobStorageLocationType', ...
+---
+>     error('parallelexamples:GenericPBS:RemoteJobStorageLocationType', ...
+26c26
+<         error('parallelexamples:GenericSLURM:IncorrectUserData', ...
+---
+>         error('parallelexamples:GenericPBS:IncorrectUserData', ...
+42c42
+<                 error('parallelexamples:GenericSLURM:IncorrectArguments', ...
+---
+>                 error('parallelexamples:GenericPBS:IncorrectArguments', ...
+63c63
+<                 warning('parallelexamples:GenericSLURM:DifferentRemoteParameters', ...
+---
+>                 warning('parallelexamples:GenericPBS:DifferentRemoteParameters', ...
+96,97c96,97
+< %   [username, useIdentityFile, identityFilename, fileHasPassphrase] = iGetCredentialsFromUI(clusterHost);
+< %lse
+---
+> %    [username, useIdentityFile, identityFilename, fileHasPassphrase] = iGetCredentialsFromUI(clusterHost);
+> %else
+104d103
+< 
+109,110c108,109
+<     userArgs = {username, ...
+<         'IdentityFilename', identityFilename, 'IdentityFileHasPassphrase', fileHasPassphrase};
+---
+>      userArgs = {username, ...
+>          'IdentityFilename', identityFilename, 'IdentityFileHasPassphrase', fileHasPassphrase};
+112c111
+< %    userArgs = {username};
+---
+> %   userArgs = {username};
+139,140c138,139
+<     % User hit cancel
+<     error('parallelexamples:GenericSLURM:UserCancelledOperation', 'User cancelled operation.');
+---
+> %    % User hit cancel
+> %    error('parallelexamples:GenericPBS:UserCancelledOperation', 'User cancelled operation.');
+144,149c143,148
+< dlgMessage = sprintf('Use an identity file to login to %s?', clusterHost);
+< identityFileResponse = questdlg(dlgMessage, dlgTitle);
+< if strcmp(identityFileResponse, 'Cancel')
+<     % User hit cancel
+<     error('parallelexamples:GenericSLURM:UserCancelledOperation', 'User cancelled operation.');
+< end
+---
+> %dlgMessage = sprintf('Use an identity file to login to %s?', clusterHost);
+> %identityFileResponse = questdlg(dlgMessage, dlgTitle);
+> %if strcmp(identityFileResponse, 'Cancel')
+> %    % User hit cancel
+> %    error('parallelexamples:GenericPBS:UserCancelledOperation', 'User cancelled operation.');
+> %end
+151,154c150,153
+< useIdentityFile = strcmp(identityFileResponse, 'Yes');
+< if ~useIdentityFile
+<     return
+< end
+---
+> %useIdentityFile = strcmp(identityFileResponse, 'Yes');
+> %if ~useIdentityFile
+> %    return
+> %end
+156,157c155,156
+< dlgMessage = 'Select Identity File to use';
+< [filename, pathname] = uigetfile({'*.*', 'All Files (*.*)'},  dlgMessage);
+---
+> %dlgMessage = 'Select Identity File to use';
+> %[filename, pathname] = uigetfile({'*.*', 'All Files (*.*)'},  dlgMessage);
+160,168c159
+<     error('parallelexamples:GenericSLURM:UserCancelledOperation', 'User cancelled operation.');
+< end
+< 
+< %identityFilename = fullfile(pathname, filename);
+< %dlgMessage = 'Does the identity file require a password?';
+< %passphraseResponse = questdlg(dlgMessage, dlgTitle);
+< %if strcmp(passphraseResponse, 'Cancel')
+< %    % User hit cancel
+< %    error('parallelexamples:GenericSLURM:UserCancelledOperation', 'User cancelled operation.');
+---
+>     error('parallelexamples:GenericPBS:UserCancelledOperation', 'User cancelled operation.');
+170c161,169
+< %fileHasPassphrase = strcmp(passphraseResponse, 'Yes');
+---
+> 
+> identityFilename = fullfile(pathname, filename);
+> dlgMessage = 'Does the identity file require a password?';
+> passphraseResponse = questdlg(dlgMessage, dlgTitle);
+> if strcmp(passphraseResponse, 'Cancel')
+>     % User hit cancel
+>     error('parallelexamples:GenericPBS:UserCancelledOperation', 'User cancelled operation.');
+> end
+> fileHasPassphrase = strcmp(passphraseResponse, 'Yes');
+189,192c188,191
+< %identityFilename = '';
+< %while isempty(identityFilename)
+< %    identityFilename = input(sprintf('Please enter the full path to the Identity File to use:\n'), 's');
+< %end
+---
+> identityFilename = '';
+> while isempty(identityFilename)
+>     identityFilename = input(sprintf('Please enter the full path to the Identity File to use:\n'), 's');
+> end
+194,196c193,195
+< %passphraseMessage = 'Does the identity file require a password? (y or n)\n';
+< %passphraseResponse = iLoopUntilValidStringInput(passphraseMessage, validYesNoResponse);
+< %fileHasPassphrase = strcmpi(passphraseResponse, 'y');
+---
+> passphraseMessage = 'Does the identity file require a password? (y or n)\n';
+> passphraseResponse = iLoopUntilValidStringInput(passphraseMessage, validYesNoResponse);
+> fileHasPassphrase = strcmpi(passphraseResponse, 'y');
