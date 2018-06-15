@@ -16,6 +16,7 @@ All rights reserved. Rocks(r) v7.0 www.rocksclusters.org
 <package>sdsc-matlab-modules</package>
 <package>sdsc-matlab-roll-test</package>
 <package>sdsc-matlab-scripts</package>
+<package>sdsc-matlab-license-files</package>
 
 <post>
 cd PKGROOT/toolbox/compiler/deploy/glnxa64
