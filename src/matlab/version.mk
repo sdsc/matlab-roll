@@ -1,6 +1,6 @@
 NAME           = sdsc-matlab
-VERSION        = 2016b
-RELEASE        = 1
+VERSION        = 2018a
+RELEASE        = 0
 PKGROOT        = /opt/matlab/$(VERSION)
 
 SRC_SUBDIR     = matlab

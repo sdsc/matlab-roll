@@ -1,11 +1,10 @@
-function deleteJobFcn_slurm(cluster, job)
-%DELETEJOBFCN Deletes a job on SLURM
+function OK = cancelJobFcn(cluster, job)
+%CANCELJOBFCN Cancels a job on Slurm
 %
-% Set your cluster's DeleteJobFcn to this function using the following
-% command:
-%     set(cluster, 'DeleteJobFcn', @deleteJobFcn);
+% Set your cluster's IntegrationScriptsLocation to the parent folder of this
+% function to run it when you cancel a job.
 
-% Copyright 2010-2015 The MathWorks, Inc.
+% Copyright 2010-2017 The MathWorks, Inc.
 
 % Store the current filename for the errors, warnings and dctSchedulerMessages
 currFilename = mfilename;
@@ -17,11 +16,12 @@ if ~cluster.HasSharedFilesystem
     error('parallelexamples:GenericSLURM:SubmitFcnError', ...
         'The submit function %s is for use with shared filesystems.', currFilename)
 end
- % Get the information about the actual cluster used
+% Get the information about the actual cluster used
 data = cluster.getJobClusterData(job);
 if isempty(data)
-    % This indicates that the job has not been submitted, so just return
+    % This indicates that the job has not been submitted, so return true
     dctSchedulerMessage(1, '%s: Job cluster data was empty for job with ID %d.', currFilename, job.ID);
+    OK = true;
     return
 end
 try
@@ -33,7 +33,7 @@ catch err
     throw(ex);
 end
 
-% Only ask the cluster to delete the job if it is hasn't reached a terminal
+% Only ask the cluster to cancel the job if it is hasn't reached a terminal
 % state.
 erroredJobs = cell(size(jobIDs));
 jobState = job.State;
@@ -41,8 +41,8 @@ if ~(strcmp(jobState, 'finished') || strcmp(jobState, 'failed'))
     % Get the cluster to delete the job
     for ii = 1:length(jobIDs)
         jobID = jobIDs{ii};
-        commandToRun = sprintf('scancel "%s"', jobID);
-        dctSchedulerMessage(4, '%s: Deleting job on cluster using command:\n\t%s.', currFilename, commandToRun);
+        commandToRun = sprintf('scancel ''%s''', jobID);
+        dctSchedulerMessage(4, '%s: Canceling job on cluster using command:\n\t%s.', currFilename, commandToRun);
         try
             % Make the shelled out call to run the command.
             [cmdFailed, cmdOut] = system(commandToRun);
@@ -52,18 +52,19 @@ if ~(strcmp(jobState, 'finished') || strcmp(jobState, 'failed'))
         end
         
         if cmdFailed
-            % Keep track of all jobs that errored when being deleted.  We'll
-            % report these later on.
+            % Keep track of all jobs that errored when being cancelled.
+            % We'll report these later on.
             erroredJobs{ii} = jobID;
-            dctSchedulerMessage(1, '%s: Failed to delete job %d on cluster.  Reason:\n\t%s', currFilename, jobID, cmdOut);
+            dctSchedulerMessage(1, '%s: Failed to cancel job %d on cluster.  Reason:\n\t%s', currFilename, jobID, cmdOut);
         end
     end
 end
 
-% Now warn about those jobs that we failed to delete.
+% Now warn about those jobs that we failed to cancel.
 erroredJobs = erroredJobs(~cellfun(@isempty, erroredJobs));
 if ~isempty(erroredJobs)
-    warning('parallelexamples:GenericSLURM:FailedToDeleteJob', ...
-        'Failed to delete the following jobs on the cluster:\n%s', ...
+    warning('parallelexamples:GenericSLURM:FailedToCancelJob', ...
+        'Failed to cancel the following jobs on the cluster:\n%s', ...
         sprintf('\t%s\n', erroredJobs{:}));
 end
+OK = isempty(erroredJobs);
