@@ -1,0 +1,13 @@
+--- mdcs_files/slurm/shared/communicatingJobWrapper.sh	2018-06-21 09:48:43.709453899 -0700
++++ patch-files/slurm/shared/communicatingJobWrapper.sh	2018-07-26 08:08:08.352293601 -0700
+@@ -153,8 +153,8 @@
+ 
+     echo "Stopping SMPD ..."
+ 
+-    echo "srun --ntasks-per-node=1 --ntasks=${SLURM_JOB_NUM_NODES} ${FULL_SMPD} -shutdown -phrase MATLAB -port ${SMPD_PORT}"
+-    srun --ntasks-per-node=1 --ntasks=${SLURM_JOB_NUM_NODES} ${FULL_SMPD} -shutdown -phrase MATLAB -port ${SMPD_PORT}
++%   echo "srun --ntasks-per-node=1 --ntasks=${SLURM_JOB_NUM_NODES} ${FULL_SMPD} -shutdown -phrase MATLAB -port ${SMPD_PORT}"
++%   srun --ntasks-per-node=1 --ntasks=${SLURM_JOB_NUM_NODES} ${FULL_SMPD} -shutdown -phrase MATLAB -port ${SMPD_PORT}
+ 
+     echo "Exiting with code: ${EXIT_CODE}"
+     exit ${EXIT_CODE}
