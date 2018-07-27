@@ -6,20 +6,20 @@ function independentSubmitFcn(cluster, job, environmentProperties)
 %
 % See also parallel.cluster.generic.independentDecodeFcn.
 
-% Copyright 2010-2017 The MathWorks, Inc.
+% Copyright 2010-2018 The MathWorks, Inc.
 
 % Store the current filename for the errors, warnings and dctSchedulerMessages
 currFilename = mfilename;
 if ~isa(cluster, 'parallel.Cluster')
-    error('parallelexamples:GenericSLURM:SubmitFcnError', ...
+    error('parallelexamples:GenericSLURM:NotClusterObject', ...
         'The function %s is for use with clusters created using the parcluster command.', currFilename)
 end
 
 decodeFunction = 'parallel.cluster.generic.independentDecodeFcn';
 
 if cluster.HasSharedFilesystem
-    error('parallelexamples:GenericSLURM:SubmitFcnError', ...
-        'The submit function %s is for use with nonshared filesystems.', currFilename)
+    error('parallelexamples:GenericSLURM:NotNonSharedFileSystem', ...
+        'The function %s is for use with nonshared filesystems.', currFilename)
 end
 
 if ~isprop(cluster.AdditionalProperties, 'ClusterHost')
@@ -39,8 +39,8 @@ else
 end
 
 if ~strcmpi(cluster.OperatingSystem, 'unix')
-    error('parallelexamples:GenericSLURM:SubmitFcnError', ...
-        'The submit function %s only supports clusters with unix OS.', currFilename)
+    error('parallelexamples:GenericSLURM:UnsupportedOS', ...
+        'The function %s only supports clusters with unix OS.', currFilename)
 end
 if ~ischar(clusterHost)
     error('parallelexamples:GenericSLURM:IncorrectArguments', ...
@@ -57,6 +57,13 @@ end
 
 remoteConnection = getRemoteConnection(cluster, clusterHost, remoteJobStorageLocation, makeLocationUnique);
 
+enableDebug = 'false';
+if isprop(cluster.AdditionalProperties, 'EnableDebug') ...
+        && islogical(cluster.AdditionalProperties.EnableDebug) ...
+        && cluster.AdditionalProperties.EnableDebug
+    enableDebug = 'true';
+end
+
 % The job specific environment variables
 % Remove leading and trailing whitespace from the MATLAB arguments
 matlabArguments = strtrim(environmentProperties.MatlabArguments);
@@ -65,7 +72,7 @@ variables = {'MDCE_DECODE_FUNCTION', decodeFunction; ...
     'MDCE_JOB_LOCATION', environmentProperties.JobLocation; ...
     'MDCE_MATLAB_EXE', environmentProperties.MatlabExecutable; ...
     'MDCE_MATLAB_ARGS', matlabArguments; ...
-    'MDCE_DEBUG', 'true'; ...
+    'PARALLEL_SERVER_DEBUG', enableDebug; ...
     'MLM_WEB_LICENSE', environmentProperties.UseMathworksHostedLicensing; ...
     'MLM_WEB_USER_CRED', environmentProperties.UserToken; ...
     'MLM_WEB_ID', environmentProperties.LicenseWebID; ...
@@ -127,6 +134,7 @@ for ii = 1:numberOfTasks
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %% CUSTOMIZATION MAY BE REQUIRED %%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   additionalSubmitArgs = sprintf('--ntasks=1 --cpus-per-task=%d', cluster.NumThreads);
     additionalSubmitArgs = sprintf('--ntasks=1 -t %s -A %s -p %s ',cluster.AdditionalProperties.Time, cluster.AdditionalProperties.Aname,cluster.AdditionalProperties.Queue);
     commonSubmitArgs = getCommonSubmitArgs(cluster);
     if ~isempty(commonSubmitArgs) && ischar(commonSubmitArgs)

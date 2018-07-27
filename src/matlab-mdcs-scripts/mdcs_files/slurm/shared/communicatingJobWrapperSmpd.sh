@@ -19,7 +19,7 @@
 # SLURM_JOB_NODELIST       - list of hostnames allocated to Slurm job
 # SLURM_TASKS_PER_NODE     - list containing number of tasks allocated per host to Slurm job
 
-# Copyright 2015-2017 The MathWorks, Inc.
+# Copyright 2015-2018 The MathWorks, Inc.
 
 # Users of Slurm older than v1.1.34 should uncomment the following code
 # to enable mapping from old Slurm environment variables:
@@ -153,8 +153,9 @@ cleanupAndExit() {
 
     echo "Stopping SMPD ..."
 
-    echo "srun --ntasks-per-node=1 --ntasks=${SLURM_JOB_NUM_NODES} ${FULL_SMPD} -shutdown -phrase MATLAB -port ${SMPD_PORT}"
-    srun --ntasks-per-node=1 --ntasks=${SLURM_JOB_NUM_NODES} ${FULL_SMPD} -shutdown -phrase MATLAB -port ${SMPD_PORT}
+    STOP_SMPD_CMD="srun --ntasks-per-node=1 --ntasks=${SLURM_JOB_NUM_NODES} ${FULL_SMPD} -shutdown -phrase MATLAB -port ${SMPD_PORT}"
+    echo $STOP_SMPD_CMD
+    eval $STOP_SMPD_CMD
 
     echo "Exiting with code: ${EXIT_CODE}"
     exit ${EXIT_CODE}
@@ -173,12 +174,12 @@ launchSmpds() {
 
     # Check that the SMPD processes are running on all hosts
     SUCCESS=0
-    NUM_ATTEMPTS=10
-    SMPD_LAUNCHED_HOSTS=""
+    NUM_ATTEMPTS=60
     ATTEMPT=1
     while [ ${ATTEMPT} -le ${NUM_ATTEMPTS} ]
     do
         echo "Checking that SMPD processes are running (Attempt ${ATTEMPT} of ${NUM_ATTEMPTS})"
+        SMPD_LAUNCHED_HOSTS=""
         NUM_HOSTS_FOUND=0
         for HOST in ${SMPD_HOSTS}
         do
@@ -203,7 +204,7 @@ launchSmpds() {
             SUCCESS=1
             break
         elif [ ${ATTEMPT} -ne ${NUM_ATTEMPTS} ] ; then
-            sleep 6
+            sleep 1
         fi
         ATTEMPT=$((ATTEMPT+1))
     done
@@ -211,7 +212,7 @@ launchSmpds() {
         if [ $NUM_HOSTS_FOUND -eq 0 ] ; then
             echo "No SMPD processes were found running.  Aborting."
         else
-            echo "Found SMPD processes running on only ${NUMHOSTS} of ${SLURM_JOB_NUM_NODES} nodes.  Aborting."
+            echo "Found SMPD processes running on only ${NUM_HOSTS_FOUND} of ${SLURM_JOB_NUM_NODES} nodes.  Aborting."
             echo "Hosts found: ${SMPD_LAUNCHED_HOSTS}"
         fi
         exit 1
@@ -222,15 +223,15 @@ launchSmpds() {
 #########################################################################################
 runMpiexec() {
 
-    CMD="${FULL_MPIEXEC} -phrase MATLAB -port ${SMPD_PORT} \
+    CMD="\"${FULL_MPIEXEC}\" -smpd -phrase MATLAB -port ${SMPD_PORT} \
         -l ${MACHINE_ARG} -genvlist \
         MDCE_DECODE_FUNCTION,MDCE_STORAGE_LOCATION,MDCE_STORAGE_CONSTRUCTOR,MDCE_JOB_LOCATION,MDCE_DEBUG,MDCE_LICENSE_NUMBER,MLM_WEB_LICENSE,MLM_WEB_USER_CRED,MLM_WEB_ID \
         \"${MDCE_MATLAB_EXE}\" ${MDCE_MATLAB_ARGS}"
 
-    # As a debug stage: echo the command line...
+    # As a debug stage: echo the command ...
     echo $CMD
 
-    # ...and then execute it.
+    # ... and then execute it.
     eval $CMD
 
     MPIEXEC_CODE=${?}

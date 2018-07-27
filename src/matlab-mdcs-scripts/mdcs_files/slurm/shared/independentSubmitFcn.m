@@ -6,26 +6,33 @@ function independentSubmitFcn(cluster, job, environmentProperties)
 %
 % See also parallel.cluster.generic.independentDecodeFcn.
 
-% Copyright 2010-2017 The MathWorks, Inc.
+% Copyright 2010-2018 The MathWorks, Inc.
 
 % Store the current filename for the errors, warnings and dctSchedulerMessages
 currFilename = mfilename;
 if ~isa(cluster, 'parallel.Cluster')
-    error('parallelexamples:GenericSLURM:SubmitFcnError', ...
+    error('parallelexamples:GenericSLURM:NotClusterObject', ...
         'The function %s is for use with clusters created using the parcluster command.', currFilename)
 end
 
 decodeFunction = 'parallel.cluster.generic.independentDecodeFcn';
 
 if ~cluster.HasSharedFilesystem
-    error('parallelexamples:GenericSLURM:SubmitFcnError', ...
-        'The submit function %s is for use with shared filesystems.', currFilename)
+    error('parallelexamples:GenericSLURM:NotSharedFileSystem', ...
+        'The function %s is for use with shared filesystems.', currFilename)
 end
 
 
 if ~strcmpi(cluster.OperatingSystem, 'unix')
-    error('parallelexamples:GenericSLURM:SubmitFcnError', ...
-        'The submit function %s only supports clusters with unix OS.', currFilename)
+    error('parallelexamples:GenericSLURM:UnsupportedOS', ...
+        'The function %s only supports clusters with unix OS.', currFilename)
+end
+
+enableDebug = 'false';
+if isprop(cluster.AdditionalProperties, 'EnableDebug') ...
+        && islogical(cluster.AdditionalProperties.EnableDebug) ...
+        && cluster.AdditionalProperties.EnableDebug
+    enableDebug = 'true';
 end
 
 % The job specific environment variables
@@ -36,7 +43,7 @@ variables = {'MDCE_DECODE_FUNCTION', decodeFunction; ...
     'MDCE_JOB_LOCATION', environmentProperties.JobLocation; ...
     'MDCE_MATLAB_EXE', environmentProperties.MatlabExecutable; ...
     'MDCE_MATLAB_ARGS', matlabArguments; ...
-    'MDCE_DEBUG', 'true'; ...
+    'PARALLEL_SERVER_DEBUG', enableDebug; ...
     'MLM_WEB_LICENSE', environmentProperties.UseMathworksHostedLicensing; ...
     'MLM_WEB_USER_CRED', environmentProperties.UserToken; ...
     'MLM_WEB_ID', environmentProperties.LicenseWebID; ...
@@ -88,13 +95,12 @@ for ii = 1:numberOfTasks
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %% CUSTOMIZATION MAY BE REQUIRED %%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   additionalSubmitArgs = sprintf('--ntasks=1 --cpus-per-task=%d', cluster.NumThreads);
     additionalSubmitArgs = sprintf('--ntasks=1 --tasks-per-node=1 -A %s -t %s -p %s',cluster.AdditionalProperties.Aname,cluster.AdditionalProperties.Time,cluster.AdditionalProperties.Queue);
-%   additionalSubmitArgs = '--ntasks=1';
-%   commonSubmitArgs = getCommonSubmitArgs(cluster);
-%   if ~isempty(commonSubmitArgs) && ischar(commonSubmitArgs)
-%       additionalSubmitArgs = strtrim([additionalSubmitArgs, ' ', commonSubmitArgs]);
-%   end
-   
+    commonSubmitArgs = getCommonSubmitArgs(cluster);
+    if ~isempty(commonSubmitArgs) && ischar(commonSubmitArgs)
+        additionalSubmitArgs = strtrim([additionalSubmitArgs, ' ', commonSubmitArgs]);
+    end
     dctSchedulerMessage(5, '%s: Generating command for task %i', currFilename, ii);
     commandToRun = getSubmitString(jobName, quotedLogFile, quotedScriptName, ...
         additionalSubmitArgs);

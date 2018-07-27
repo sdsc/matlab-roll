@@ -92,15 +92,15 @@ end
 % fileHasPassphrase - whether or not the identity file requires a passphrase
 %                     (true/false).
 %if isempty(javachk('awt'))
-%    % MATLAB has been started with a desktop, so use dialogs to get credential data.
-%   [username, useIdentityFile, identityFilename, fileHasPassphrase] = iGetCredentialsFromUI(clusterHost);
-%lse
+    % MATLAB has been started with a desktop, so use dialogs to get credential data.
+%    [username, useIdentityFile, identityFilename, fileHasPassphrase] = iGetCredentialsFromUI(clusterHost);
+%else
     % MATLAB has been started in nodisplay mode, so use command line to get credential data
-%    [username, useIdentityFile, identityFilename, fileHasPassphrase] = iGetCredentialsFromCommandLine(clusterHost);
+    %[username, useIdentityFile, identityFilename, fileHasPassphrase] = iGetCredentialsFromCommandLine(clusterHost);
+    username=cluster.AdditionalProperties.User
+    fileHasPassphrase=false
+    identityFilename=cluster.AdditionalProperties.Keyfile
 %end
-username=cluster.AdditionalProperties.User
-fileHasPassphrase=false
-identityFilename=cluster.AdditionalProperties.Keyfile
 
 % Establish a new connection
 %if useIdentityFile
@@ -137,28 +137,28 @@ fileHasPassphrase = false;
 % a (non-empty) cell array containing an empty string
 %if isempty(usernameResponse)
     % User hit cancel
-    error('parallelexamples:GenericSLURM:UserCancelledOperation', 'User cancelled operation.');
+%   error('parallelexamples:GenericSLURM:UserCancelledOperation', 'User cancelled operation.');
 %end
 %username = char(usernameResponse);
 
-dlgMessage = sprintf('Use an identity file to login to %s?', clusterHost);
-identityFileResponse = questdlg(dlgMessage, dlgTitle);
-if strcmp(identityFileResponse, 'Cancel')
-    % User hit cancel
-    error('parallelexamples:GenericSLURM:UserCancelledOperation', 'User cancelled operation.');
-end
+%dlgMessage = sprintf('Use an identity file to login to %s?', clusterHost);
+%identityFileResponse = questdlg(dlgMessage, dlgTitle);
+%if strcmp(identityFileResponse, 'Cancel')
+%    % User hit cancel
+%    error('parallelexamples:GenericSLURM:UserCancelledOperation', 'User cancelled operation.');
+%end
 
-useIdentityFile = strcmp(identityFileResponse, 'Yes');
-if ~useIdentityFile
-    return
-end
+%useIdentityFile = strcmp(identityFileResponse, 'Yes');
+%if ~useIdentityFile
+%    return
+%end
 
-dlgMessage = 'Select Identity File to use';
-[filename, pathname] = uigetfile({'*.*', 'All Files (*.*)'},  dlgMessage);
+%dlgMessage = 'Select Identity File to use';
+%[filename, pathname] = uigetfile({'*.*', 'All Files (*.*)'},  dlgMessage);
 % If the user hit cancel, then filename and pathname will both be 0.
-if isequal(filename, 0) && isequal(pathname,0)
-    error('parallelexamples:GenericSLURM:UserCancelledOperation', 'User cancelled operation.');
-end
+%if isequal(filename, 0) && isequal(pathname,0)
+%    error('parallelexamples:GenericSLURM:UserCancelledOperation', 'User cancelled operation.');
+%end
 
 %identityFilename = fullfile(pathname, filename);
 %dlgMessage = 'Does the identity file require a password?';
