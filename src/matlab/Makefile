@@ -70,8 +70,6 @@ include $(SDSCDEVEL)/Rules.mk
 
 $(NAME).spec: DESCRIPTION
 
-BUILDIT = 1
-
 DESCRIPTION:
 	( \
 	  $(DESCRIBE_PKG) \
@@ -88,14 +86,11 @@ build: $(SRC_DIRS)
 	   export -n DISPLAY=; \
 	   cd $(SOURCE_DIR); \
 	   ./install  -mode silent  -destinationFolder $(TEMP_DIRS)/build-matlab -fileInstallationKey $(FIK) -agreeToLicense yes -outputFile /tmp/matlab.log -licensePath $(REDHAT.ROOT)/src/matlab-license-files/network.lic -lmgrFiles false -lmgrService false; \
-           cp -r $(REDHAT.ROOT)/src/matlab/mdcs_files/* $(TEMP_DIRS)/build-matlab/toolbox/local; \
            rm -rf $(TEMP_DIRS)/build-matlab/licenses; \
            packageCount=1; \
            mkdir  -p $(TEMP_DIRS)/build-matlab_$${packageCount}; \
            echo build-matlab_$${packageCount} >> $(MANIFEST_DIR)/manifest; \
            cd  $(TEMP_DIRS)/build-matlab; \
-           split -b 500000000 toolbox/compiler/deploy/glnxa64/MCRInstaller.zip toolbox/compiler/deploy/glnxa64/MCRInstaller.zip.x ; \
-           rm -f toolbox/compiler/deploy/glnxa64/MCRInstaller.zip; \
            find . ! -type d -exec ls -l {} \; >$(TEMP_DIRS)/$$$$.tmp; \
            sum=0; \
            total=`du -b -s|awk '{print $$1}'`; \

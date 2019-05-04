@@ -17,6 +17,8 @@ for numerical computation, visualization, and programming.
 
 ## Requirements
 
+Starting with matlab 2019a, centos 6 is no longer supported. The last commit that was tested with centos 6 has the "centos6" tag (commit e7ce07b)
+
 To build/install this roll you must have root access to a Rocks development
 machine (e.g., a frontend or development appliance).
 
