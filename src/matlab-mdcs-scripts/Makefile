@@ -71,8 +71,6 @@ $(VERSION_INC): $(VERSION_SRC)
 install::
 	mkdir -p $(ROOT)/$(PKGROOT)
 	cp -r mdcs_files/* $(ROOT)/$(PKGROOT); \
-	patch $(ROOT)$(PKGROOT)/slurm/nonshared/communicatingJobWrapper.sh patch-files/slurm/nonshared/communicatingJobWrapper.sh.patch; \
-	patch $(ROOT)$(PKGROOT)/slurm/shared/communicatingJobWrapper.sh patch-files/slurm/shared/communicatingJobWrapper.sh.patch; \
 	
 
 clean::

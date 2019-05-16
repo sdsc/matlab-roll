@@ -4,5 +4,5 @@ function deleteJobFcn(cluster, job)
 % Set your cluster's IntegrationScriptsLocation to the parent folder of this
 % function to run it when you delete a job.
 
-% Copyright 2017 The MathWorks, Inc.
+% Copyright 2017-2018 The MathWorks, Inc.
 cancelJobFcn(cluster, job);

@@ -4,7 +4,7 @@ function OK = cancelJobFcn(cluster, job)
 % Set your cluster's IntegrationScriptsLocation to the parent folder of this
 % function to run it when you cancel a job.
 
-% Copyright 2010-2017 The MathWorks, Inc.
+% Copyright 2010-2018 The MathWorks, Inc.
 
 % Store the current filename for the errors, warnings and dctSchedulerMessages
 currFilename = mfilename;
@@ -13,8 +13,8 @@ if ~isa(cluster, 'parallel.Cluster')
         'The function %s is for use with clusters created using the parcluster command.', currFilename)
 end
 if cluster.HasSharedFilesystem
-    error('parallelexamples:GenericSLURM:SubmitFcnError', ...
-        'The submit function %s is for use with nonshared filesystems.', currFilename)
+    error('parallelexamples:GenericSLURM:NotNonSharedFileSystem', ...
+        'The function %s is for use with nonshared filesystems.', currFilename)
 end
 % Get the information about the actual cluster used
 data = cluster.getJobClusterData(job);
@@ -46,7 +46,7 @@ end
 
 % Only ask the cluster to cancel the job if it is hasn't reached a terminal
 % state.
-erroredJobs = cell(size(jobIDs));
+erroredJobAndCauseStrings = cell(size(jobIDs));
 jobState = job.State;
 if ~(strcmp(jobState, 'finished') || strcmp(jobState, 'failed'))
     % Get the cluster to delete the job
@@ -64,7 +64,7 @@ if ~(strcmp(jobState, 'finished') || strcmp(jobState, 'failed'))
             cmdOut = err.message;
         end
         if cmdFailed
-            erroredJobs{ii} = jobID;
+            erroredJobAndCauseStrings{ii} = sprintf('Job ID: %s\tReason: %s', jobID, strtrim(cmdOut));
             dctSchedulerMessage(1, '%s: Failed to cancel job %d on cluster.  Reason:\n\t%s', currFilename, jobID, cmdOut);
         end
     end
@@ -82,10 +82,10 @@ if remoteConnection.isJobUsingConnection(job.ID)
     end
 end
 % Now warn about those jobs that we failed to cancel.
-erroredJobs = erroredJobs(~cellfun(@isempty, erroredJobs));
-if ~isempty(erroredJobs)
+erroredJobAndCauseStrings = erroredJobAndCauseStrings(~cellfun(@isempty, erroredJobAndCauseStrings));
+if ~isempty(erroredJobAndCauseStrings)
     warning('parallelexamples:GenericSLURM:FailedToCancelJob', ...
         'Failed to cancel the following jobs on the cluster:\n%s', ...
-        sprintf('\t%s\n', erroredJobs{:}));
+        sprintf('  %s\n', erroredJobAndCauseStrings{:}));
 end
-OK = isempty(erroredJobs);
+OK = isempty(erroredJobAndCauseStrings);

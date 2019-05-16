@@ -4,7 +4,7 @@ function state = getJobStateFcn(cluster, job, state)
 % Set your cluster's IntegrationScriptsLocation to the parent folder of this
 % function to run it when you query the state of a job.
 
-% Copyright 2010-2017 The MathWorks, Inc.
+% Copyright 2010-2018 The MathWorks, Inc.
 
 % Store the current filename for the errors, warnings and dctSchedulerMessages
 currFilename = mfilename;
@@ -13,8 +13,8 @@ if ~isa(cluster, 'parallel.Cluster')
         'The function %s is for use with clusters created using the parcluster command.', currFilename)
 end
 if cluster.HasSharedFilesystem
-    error('parallelexamples:GenericSLURM:SubmitFcnError', ...
-        'The submit function %s is for use with nonshared filesystems.', currFilename)
+    error('parallelexamples:GenericSLURM:NotNonSharedFileSystem', ...
+        'The function %s is for use with nonshared filesystems.', currFilename)
 end
 
 % Get the information about the actual cluster used

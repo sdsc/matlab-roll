@@ -6,7 +6,7 @@
 # MDCE_MATLAB_ARGS    - the MATLAB args to use
 #
 
-# Copyright 2010-2017 The MathWorks, Inc.
+# Copyright 2010-2018 The MathWorks, Inc.
 
 echo "Executing: ${MDCE_MATLAB_EXE} ${MDCE_MATLAB_ARGS}"
 eval "${MDCE_MATLAB_EXE}" ${MDCE_MATLAB_ARGS}

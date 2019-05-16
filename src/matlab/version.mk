@@ -1,5 +1,5 @@
 NAME           = sdsc-matlab
-VERSION        = 2018a
+VERSION        = 2019a
 RELEASE        = 0
 PKGROOT        = /opt/matlab/$(VERSION)
 

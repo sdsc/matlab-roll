@@ -1,7 +1,7 @@
 PACKAGE     = matlab
 NAME        = sdsc-matlab-mdcs-scripts
 PKGROOT     = /opt/matlab/$(VERSION)/toolbox/local/mdcs_files
-RELEASE     = 0
+RELEASE     = 1
 
 VERSION_SRC = $(REDHAT.ROOT)/src/$(PACKAGE)/version.mk
 VERSION_INC = version.inc

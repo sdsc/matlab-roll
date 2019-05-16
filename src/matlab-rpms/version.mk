@@ -1,8 +1,8 @@
 PACKAGE     = matlab
 
 NAME        = sdsc-matlab
-VERSION     = 2018a
-RELEASE     = 1
+VERSION     = 2019a
+RELEASE     = 0
 PKGROOT     = /opt/matlab/$(VERSION)
 
 VERSION_SRC = $(REDHAT.ROOT)/src/$(PACKAGE)/version.mk

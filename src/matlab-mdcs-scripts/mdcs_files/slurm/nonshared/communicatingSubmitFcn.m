@@ -6,20 +6,20 @@ function communicatingSubmitFcn(cluster, job, environmentProperties)
 %
 % See also parallel.cluster.generic.communicatingDecodeFcn.
 
-% Copyright 2010-2017 The MathWorks, Inc.
+% Copyright 2010-2018 The MathWorks, Inc.
 
 % Store the current filename for the errors, warnings and dctSchedulerMessages
 currFilename = mfilename;
 if ~isa(cluster, 'parallel.Cluster')
-    error('parallelexamples:GenericSLURM:SubmitFcnError', ...
+    error('parallelexamples:GenericSLURM:NotClusterObject', ...
         'The function %s is for use with clusters created using the parcluster command.', currFilename)
 end
 
 decodeFunction = 'parallel.cluster.generic.communicatingDecodeFcn';
 
 if cluster.HasSharedFilesystem
-    error('parallelexamples:GenericSLURM:SubmitFcnError', ...
-        'The submit function %s is for use with nonshared filesystems.', currFilename)
+    error('parallelexamples:GenericSLURM:NotNonSharedFileSystem', ...
+        'The function %s is for use with nonshared filesystems.', currFilename)
 end
 
 if ~isprop(cluster.AdditionalProperties, 'ClusterHost')
@@ -39,8 +39,8 @@ else
 end
 
 if ~strcmpi(cluster.OperatingSystem, 'unix')
-    error('parallelexamples:GenericSLURM:SubmitFcnError', ...
-        'The submit function %s only supports clusters with unix OS.', currFilename)
+    error('parallelexamples:GenericSLURM:UnsupportedOS', ...
+        'The function %s only supports clusters with unix OS.', currFilename)
 end
 if ~ischar(clusterHost)
     error('parallelexamples:GenericSLURM:IncorrectArguments', ...
@@ -57,6 +57,13 @@ end
 
 remoteConnection = getRemoteConnection(cluster, clusterHost, remoteJobStorageLocation, makeLocationUnique);
 
+enableDebug = 'false';
+if isprop(cluster.AdditionalProperties, 'EnableDebug') ...
+        && islogical(cluster.AdditionalProperties.EnableDebug) ...
+        && cluster.AdditionalProperties.EnableDebug
+    enableDebug = 'true';
+end
+
 % The job specific environment variables
 % Remove leading and trailing whitespace from the MATLAB arguments
 matlabArguments = strtrim(environmentProperties.MatlabArguments);
@@ -65,14 +72,15 @@ variables = {'MDCE_DECODE_FUNCTION', decodeFunction; ...
     'MDCE_JOB_LOCATION', environmentProperties.JobLocation; ...
     'MDCE_MATLAB_EXE', environmentProperties.MatlabExecutable; ...
     'MDCE_MATLAB_ARGS', matlabArguments; ...
-    'MDCE_DEBUG', 'true'; ...
+    'PARALLEL_SERVER_DEBUG', enableDebug; ...
     'MLM_WEB_LICENSE', environmentProperties.UseMathworksHostedLicensing; ...
     'MLM_WEB_USER_CRED', environmentProperties.UserToken; ...
     'MLM_WEB_ID', environmentProperties.LicenseWebID; ...
     'MDCE_LICENSE_NUMBER', environmentProperties.LicenseNumber; ...
     'MDCE_STORAGE_LOCATION', remoteConnection.JobStorageLocation; ...
     'MDCE_CMR', cluster.ClusterMatlabRoot; ...
-    'MDCE_TOTAL_TASKS', num2str(environmentProperties.NumberOfTasks)};
+    'MDCE_TOTAL_TASKS', num2str(environmentProperties.NumberOfTasks); ...
+    'MDCE_NUM_THREADS', num2str(cluster.NumThreads)};
 % Trim the environment variables of empty values.
 nonEmptyValues = cellfun(@(x) ~isempty(strtrim(x)), variables(:,2));
 variables = variables(nonEmptyValues, :);
@@ -94,9 +102,12 @@ end
 localJobDirectory = cluster.getJobFolder(job);
 % How we refer to the job directory on the cluster
 remoteJobDirectory = remoteConnection.getRemoteJobLocation(job.ID, cluster.OperatingSystem);
-
-% The script name is communicatingJobWrapper.sh
-scriptName = 'communicatingJobWrapper.sh';
+% Specify the job wrapper script to use.
+if isprop(cluster.AdditionalProperties, 'UseSmpd') && cluster.AdditionalProperties.UseSmpd
+    scriptName = 'communicatingJobWrapperSmpd.sh';
+else
+    scriptName = 'communicatingJobWrapper.sh';
+end
 % The wrapper script is in the same directory as this file
 dirpart = fileparts(mfilename('fullpath'));
 localScript = fullfile(dirpart, scriptName);
@@ -118,7 +129,7 @@ jobName = sprintf('Job%d', job.ID);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % You might want to customize this section to match your cluster,
 % for example to limit the number of nodes for a single job.
-%additionalSubmitArgs = sprintf('--ntasks=%d', environmentProperties.NumberOfTasks);
+%additionalSubmitArgs = sprintf('--ntasks=%d --cpus-per-task=%d', environmentProperties.NumberOfTasks, cluster.NumThreads);
 additionalSubmitArgs = sprintf('--ntasks=%d --tasks-per-node=%d -t %s -A %s -p %s ',environmentProperties.NumberOfTasks,cluster.AdditionalProperties.Ppn,cluster.AdditionalProperties.Time, cluster.AdditionalProperties.Aname,cluster.AdditionalProperties.Queue);
 commonSubmitArgs = getCommonSubmitArgs(cluster);
 if ~isempty(commonSubmitArgs) && ischar(commonSubmitArgs)
